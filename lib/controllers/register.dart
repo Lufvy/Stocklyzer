@@ -5,18 +5,15 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:stocklyzer/config/appTheme.dart';
-import 'package:stocklyzer/controllers/loginController.dart';
 import 'package:stocklyzer/controllers/themeController.dart';
-import 'package:stocklyzer/config/extension.dart';
-import 'package:stocklyzer/controllers/register.dart';
+import 'package:stocklyzer/controllers/login.dart';
 
-class Login extends StatelessWidget {
-  const Login({super.key});
+class Register extends StatelessWidget {
+  Register({super.key});
+  final themeController = Get.find<Themecontroller>();
 
   @override
   Widget build(BuildContext context) {
-    final themeController = Get.find<Themecontroller>();
-    // final Logincontroller logincontroller = Get.put(Logincontroller());
     return Scaffold(
       body: Obx(() {
         return Container(
@@ -59,6 +56,7 @@ class Login extends StatelessWidget {
                                         color: Colors.white,
                                       ),
                                     ),
+
                               Row(
                                 children: [
                                   AnimatedToggleSwitch<bool>.dual(
@@ -73,7 +71,8 @@ class Login extends StatelessWidget {
                                       indicatorColor: Theme.of(
                                         context,
                                       ).primaryColor,
-                                      backgroundColor: Theme.of(
+
+                                    backgroundColor: Theme.of(
                                         context,
                                       ).colorScheme.background,
                                       indicatorBorder: Border.all(
@@ -138,31 +137,49 @@ class Login extends StatelessWidget {
                           ),
                           const SizedBox(height: 20),
                           Text(
-                            'loginTitle'.tr,
+                            'registerTitle'.tr,
                             style: GoogleFonts.poppins(
                               fontSize: 32,
-                              fontWeight: CustomFontWeight.bold,
+                              fontWeight: FontWeight.bold,
                             ),
                           ),
                           Text(
-                            'login'.tr,
+                            'register'.tr,
                             style: GoogleFonts.poppins(
                               fontSize: 20,
-                              fontWeight: CustomFontWeight.semiBold,
+                              fontWeight: FontWeight.w500,
                             ),
                           ),
                           SizedBox(height: 2),
                           FractionallySizedBox(
-                            widthFactor: 0.2,
+                            widthFactor: 0.25,
                             child: Container(
                               height: 5,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(3),
-                                color: Theme.of(context).colorScheme.onPrimary,
+                              color: Theme.of(context).colorScheme.onPrimary,
+                            ),
+                          ),
+                          SizedBox(height: 10),
+                          Text(
+                            'Name',
+                            style: GoogleFonts.poppins(fontSize: 15),
+                          ),
+                          SizedBox(height: 5),
+                          TextFormField(
+                            decoration: InputDecoration(
+                              hintText: 'nameHint'.tr,
+                              hintStyle: TextStyle(
+                                color: themeController.isDarkMode.value
+                                    ? Colors.white.withOpacity(0.59)
+                                    : Colors.black.withOpacity(0.59),
+                              ),
+                              border: OutlineInputBorder(),
+                              prefixIcon: Icon(Icons.person_outline),
+                              contentPadding: EdgeInsets.symmetric(
+                                horizontal: 15,
+                                vertical: 0,
                               ),
                             ),
                           ),
-
                           SizedBox(height: 10),
                           Text(
                             'Email',
@@ -200,16 +217,17 @@ class Login extends StatelessWidget {
                                     ? Colors.white.withOpacity(0.59)
                                     : Colors.black.withOpacity(0.59),
                               ),
-                              suffixIcon: Icon(Icons.visibility_outlined),
-
-                              border: OutlineInputBorder(),
                               prefixIcon: Icon(Icons.lock_outline),
+                              suffixIcon: Icon(Icons.visibility_outlined),
+                              border: OutlineInputBorder(),
+
                               contentPadding: EdgeInsets.symmetric(
                                 horizontal: 15,
                                 vertical: 0,
                               ),
                             ),
                           ),
+
                           SizedBox(height: 30),
                           SizedBox(
                             width: double.infinity,
@@ -224,68 +242,11 @@ class Login extends StatelessWidget {
                                 padding: EdgeInsets.symmetric(vertical: 8),
                               ),
                               child: Text(
-                                'loginButton'.tr,
+                                'registerButton'.tr,
                                 style: GoogleFonts.poppins(
                                   fontSize: 20,
-                                  fontWeight: CustomFontWeight.semiBold,
+                                  fontWeight: FontWeight.w700,
                                 ),
-                              ),
-                            ),
-                          ),
-                          SizedBox(height: 15),
-                          Row(
-                            children: [
-                              Expanded(child: Divider()),
-                              Padding(
-                                padding: const EdgeInsets.symmetric(
-                                  horizontal: 20,
-                                ),
-                                child: Text('OR'),
-                              ),
-                              Expanded(child: Divider()),
-                            ],
-                          ),
-                          SizedBox(height: 15),
-                          SizedBox(
-                            width: double.infinity,
-                            height: 50,
-                            child: ElevatedButton(
-                              onPressed: () {},
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: Colors.transparent,
-                                shadowColor: Colors.transparent,
-                                elevation: 0,
-                                side: BorderSide(
-                                  color: Theme.of(
-                                    context,
-                                  ).colorScheme.onPrimary,
-                                  width: 2,
-                                ),
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(8),
-                                ),
-                                padding: EdgeInsets.symmetric(vertical: 8),
-                              ),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Image.asset(
-                                    'assets/google.png',
-                                    width: 30,
-                                    height: 30,
-                                  ),
-                                  SizedBox(width: 10),
-                                  Text(
-                                    'loginGoogle'.tr,
-                                    style: GoogleFonts.poppins(
-                                      fontSize: 16,
-                                      fontWeight: CustomFontWeight.medium,
-                                      color: Theme.of(
-                                        context,
-                                      ).colorScheme.onPrimary,
-                                    ),
-                                  ),
-                                ],
                               ),
                             ),
                           ),
@@ -299,26 +260,26 @@ class Login extends StatelessWidget {
                       text: TextSpan(
                         style: GoogleFonts.poppins(
                           fontSize: 15,
-                          fontWeight: CustomFontWeight.medium,
+                          fontWeight: FontWeight.w500,
                           color: Theme.of(context).colorScheme.onPrimary,
                         ),
                         children: [
                           TextSpan(
-                            text: 'dontHaveAccount'.tr,
+                            text: 'haveAccount'.tr,
                             style: GoogleFonts.poppins(
                               fontWeight: FontWeight.w500,
                             ),
                           ),
                           TextSpan(
-                            text: 'dontHaveAccount1'.tr,
+                            text: 'haveAccount1'.tr,
                             style: GoogleFonts.poppins(
                               color: Theme.of(context).colorScheme.secondary,
-                              fontWeight: CustomFontWeight.bold,
+                              fontWeight: FontWeight.bold,
                               decoration: TextDecoration.underline,
                             ),
                             recognizer: TapGestureRecognizer()
                               ..onTap = () {
-                                Get.to(() => Register());
+                                Get.to(() => Login());
                               },
                           ),
                         ],

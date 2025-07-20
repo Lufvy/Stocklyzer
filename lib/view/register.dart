@@ -4,9 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:stocklyzer/appTheme.dart';
+import 'package:stocklyzer/config/appTheme.dart';
 import 'package:stocklyzer/controllers/themeController.dart';
-import 'package:stocklyzer/login.dart';
+import 'package:stocklyzer/view/login.dart';
 
 class Register extends StatelessWidget {
   Register({super.key});

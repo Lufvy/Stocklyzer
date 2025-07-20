@@ -8,7 +8,7 @@ import 'package:stocklyzer/config/appTheme.dart';
 import 'package:stocklyzer/controllers/onboardingController.dart';
 import 'package:stocklyzer/controllers/themeController.dart';
 import 'package:stocklyzer/config/extension.dart';
-import 'package:stocklyzer/view/login.dart';
+import 'package:stocklyzer/controllers/login.dart';
 import 'package:stocklyzer/controllers/register.dart';
 
 class Onboarding extends StatelessWidget {
