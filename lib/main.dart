@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:stocklyzer/appTheme.dart';
+import 'package:stocklyzer/config/appTheme.dart';
 import 'package:stocklyzer/controllers/onboardingController.dart';
 import 'package:stocklyzer/controllers/themeController.dart';
 import 'package:stocklyzer/config/language.dart';

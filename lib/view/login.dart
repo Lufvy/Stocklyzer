@@ -8,7 +8,7 @@ import 'package:stocklyzer/config/appTheme.dart';
 import 'package:stocklyzer/controllers/loginController.dart';
 import 'package:stocklyzer/controllers/themeController.dart';
 import 'package:stocklyzer/config/extension.dart';
-import 'package:stocklyzer/controllers/register.dart';
+import 'package:stocklyzer/view/register.dart';
 
 class Login extends StatelessWidget {
   const Login({super.key});
