@@ -5,6 +5,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:stocklyzer/config/appTheme.dart';
+import 'package:stocklyzer/config/extension.dart';
 import 'package:stocklyzer/controllers/themeController.dart';
 import 'package:stocklyzer/view/login.dart';
 
@@ -32,102 +33,242 @@ class Register extends StatelessWidget {
                   Expanded(
                     child: SingleChildScrollView(
                       child: Column(
+                        spacing: 27,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          Column(
+                            spacing: 20,
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              themeController.isDarkMode.value
-                                  ? SvgPicture.asset('assets/Logo.svg')
-                                  : ShaderMask(
-                                      shaderCallback: (bounds) =>
-                                          LinearGradient(
-                                            colors: [
-                                              Color(0XFF01353D),
-                                              Color(0XFF007283),
-                                            ],
-                                            stops: [0.2, 0.75],
-                                            begin: Alignment.topCenter,
-                                            end: Alignment.bottomCenter,
-                                          ).createShader(bounds),
-                                      blendMode: BlendMode.srcIn,
-                                      child: SvgPicture.asset(
-                                        'assets/Logo.svg',
-                                        color: Colors.white,
-                                      ),
-                                    ),
-
                               Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
                                 children: [
-                                  AnimatedToggleSwitch<bool>.dual(
-                                    current: themeController.isDarkMode.value,
-                                    first: false,
-                                    second: true,
-                                    spacing: 4.0,
-                                    onChanged: (_) =>
-                                        themeController.toggleTheme(),
-                                    style: ToggleStyle(
-                                      borderRadius: BorderRadius.circular(20.0),
-                                      indicatorColor: Theme.of(
-                                        context,
-                                      ).primaryColor,
+                                  themeController.isDarkMode.value
+                                      ? SvgPicture.asset('assets/Logo.svg')
+                                      : ShaderMask(
+                                          shaderCallback: (bounds) =>
+                                              LinearGradient(
+                                                colors: [
+                                                  Color(0XFF01353D),
+                                                  Color(0XFF007283),
+                                                ],
+                                                stops: [0.2, 0.75],
+                                                begin: Alignment.topCenter,
+                                                end: Alignment.bottomCenter,
+                                              ).createShader(bounds),
+                                          blendMode: BlendMode.srcIn,
+                                          child: SvgPicture.asset(
+                                            'assets/Logo.svg',
+                                            color: Colors.white,
+                                          ),
+                                        ),
+                                  Row(
+                                    children: [
+                                      AnimatedToggleSwitch<bool>.dual(
+                                        current:
+                                            themeController.isDarkMode.value,
+                                        first: false,
+                                        second: true,
+                                        spacing: 4.0,
+                                        onChanged: (_) =>
+                                            themeController.toggleTheme(),
+                                        style: ToggleStyle(
+                                          borderRadius: BorderRadius.circular(
+                                            20.0,
+                                          ),
+                                          indicatorColor: Theme.of(
+                                            context,
+                                          ).primaryColor,
+                                          backgroundColor: Theme.of(
+                                            context,
+                                          ).colorScheme.background,
+                                          indicatorBorder: Border.all(
+                                            color: Theme.of(
+                                              context,
+                                            ).primaryColor,
+                                            width: 3,
+                                          ),
+                                          borderColor: Colors.transparent,
+                                        ),
+                                        iconBuilder: (value) => value
+                                            ? Icon(
+                                                Icons.nightlight_round,
+                                                color: Color(0xFF01353D),
+                                              )
+                                            : Icon(
+                                                Icons.wb_sunny,
+                                                color: Colors.yellow,
+                                              ),
 
-                                    backgroundColor: Theme.of(
-                                        context,
-                                      ).colorScheme.background,
-                                      indicatorBorder: Border.all(
-                                        color: Theme.of(context).primaryColor,
-                                        width: 3,
+                                        height: 40,
+                                        indicatorSize: const Size.square(35),
+
+                                        animationDuration: const Duration(
+                                          milliseconds: 250,
+                                        ),
                                       ),
-                                      borderColor: Colors.transparent,
-                                    ),
-                                    iconBuilder: (value) => value
-                                        ? Icon(
-                                            Icons.nightlight_round,
-                                            color: Color(0xFF01353D),
-                                          )
-                                        : Icon(
-                                            Icons.wb_sunny,
-                                            color: Colors.yellow,
+                                      Obx(
+                                        () => AnimatedToggleSwitch<bool>.size(
+                                          current:
+                                              themeController.isEnglish.value,
+                                          values: const [false, true],
+                                          height: 30,
+                                          indicatorSize: const Size(45, 25),
+                                          iconOpacity: 1.0,
+                                          animationDuration: const Duration(
+                                            milliseconds: 300,
+                                          ),
+                                          style: ToggleStyle(
+                                            backgroundColor: Theme.of(
+                                              context,
+                                            ).colorScheme.background,
+                                            indicatorColor: Colors.transparent,
+                                            borderColor: Colors.transparent,
+                                            borderRadius: BorderRadius.circular(
+                                              6,
+                                            ),
                                           ),
 
-                                    height: 40,
-                                    indicatorSize: const Size.square(35),
+                                          onChanged:
+                                              themeController.toggleLanguage,
+                                          iconBuilder: (value) => ClipRRect(
+                                            borderRadius: BorderRadius.circular(
+                                              6,
+                                            ),
+                                            child: Image.asset(
+                                              value
+                                                  ? 'assets/EN.png'
+                                                  : 'assets/ID.png',
+                                              fit: BoxFit.cover,
+                                              width: 30,
+                                              height: 30,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                              Text(
+                                'registerTitle'.tr,
+                                style: GoogleFonts.poppins(
+                                  fontSize: 32,
+                                  fontWeight: CustomFontWeight.bold,
+                                ),
+                              ),
+                            ],
+                          ),
 
-                                    animationDuration: const Duration(
-                                      milliseconds: 250,
+                          Column(
+                            spacing: 10,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    'register'.tr,
+                                    style: GoogleFonts.poppins(
+                                      fontSize: 20,
+                                      fontWeight: CustomFontWeight.semiBold,
                                     ),
                                   ),
-                                  Obx(
-                                    () => AnimatedToggleSwitch<bool>.size(
-                                      current: themeController.isEnglish.value,
-                                      values: const [false, true],
-                                      height: 30,
-                                      indicatorSize: const Size(45, 25),
-                                      iconOpacity: 1.0,
-                                      animationDuration: const Duration(
-                                        milliseconds: 300,
-                                      ),
-                                      style: ToggleStyle(
-                                        backgroundColor: Theme.of(
+                                  SizedBox(height: 5),
+                                  FractionallySizedBox(
+                                    widthFactor: 0.3,
+                                    child: Container(
+                                      height: 3,
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(3),
+                                        color: Theme.of(
                                           context,
-                                        ).colorScheme.background,
-                                        indicatorColor: Colors.transparent,
-                                        borderColor: Colors.transparent,
-                                        borderRadius: BorderRadius.circular(6),
+                                        ).colorScheme.onPrimary,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    'Name',
+                                    style: GoogleFonts.poppins(fontSize: 15),
+                                  ),
+                                  SizedBox(height: 5),
+                                  TextFormField(
+                                    decoration: InputDecoration(
+                                      hintText: 'nameHint'.tr,
+                                      hintStyle: TextStyle(
+                                        color: themeController.isDarkMode.value
+                                            ? Colors.white.withOpacity(0.59)
+                                            : Colors.black.withOpacity(0.59),
+                                      ),
+                                      border: OutlineInputBorder(),
+                                      prefixIcon: Icon(Icons.person_outline),
+                                      contentPadding: EdgeInsets.symmetric(
+                                        horizontal: 15,
+                                        vertical: 0,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              Column(
+                                spacing: 5,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    'Email',
+                                    style: GoogleFonts.poppins(fontSize: 15),
+                                  ),
+                                  TextFormField(
+                                    decoration: InputDecoration(
+                                      hintText: 'emailHint'.tr,
+                                      hintStyle: TextStyle(
+                                        color: themeController.isDarkMode.value
+                                            ? Colors.white.withOpacity(0.59)
+                                            : Colors.black.withOpacity(0.59),
+                                      ),
+                                      border: OutlineInputBorder(),
+                                      prefixIcon: Icon(Icons.email_outlined),
+                                      contentPadding: EdgeInsets.symmetric(
+                                        horizontal: 15,
+                                        vertical: 0,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              Column(
+                                spacing: 5,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    'Password',
+                                    style: GoogleFonts.poppins(fontSize: 15),
+                                  ),
+                                  TextFormField(
+                                    obscureText: true,
+                                    decoration: InputDecoration(
+                                      hintText: 'passwordHint'.tr,
+                                      hintStyle: TextStyle(
+                                        color: themeController.isDarkMode.value
+                                            ? Colors.white.withOpacity(0.59)
+                                            : Colors.black.withOpacity(0.59),
+                                      ),
+                                      suffixIcon: Icon(
+                                        Icons.visibility_outlined,
                                       ),
 
-                                      onChanged: themeController.toggleLanguage,
-                                      iconBuilder: (value) => ClipRRect(
-                                        borderRadius: BorderRadius.circular(6),
-                                        child: Image.asset(
-                                          value
-                                              ? 'assets/EN.png'
-                                              : 'assets/ID.png',
-                                          fit: BoxFit.cover,
-                                          width: 30,
-                                          height: 30,
-                                        ),
+                                      border: OutlineInputBorder(),
+                                      prefixIcon: Icon(Icons.lock_outline),
+                                      contentPadding: EdgeInsets.symmetric(
+                                        horizontal: 15,
+                                        vertical: 0,
                                       ),
                                     ),
                                   ),
@@ -135,100 +276,6 @@ class Register extends StatelessWidget {
                               ),
                             ],
                           ),
-                          const SizedBox(height: 20),
-                          Text(
-                            'registerTitle'.tr,
-                            style: GoogleFonts.poppins(
-                              fontSize: 32,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          Text(
-                            'register'.tr,
-                            style: GoogleFonts.poppins(
-                              fontSize: 20,
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
-                          SizedBox(height: 2),
-                          FractionallySizedBox(
-                            widthFactor: 0.25,
-                            child: Container(
-                              height: 5,
-                              color: Theme.of(context).colorScheme.onPrimary,
-                            ),
-                          ),
-                          SizedBox(height: 10),
-                          Text(
-                            'Name',
-                            style: GoogleFonts.poppins(fontSize: 15),
-                          ),
-                          SizedBox(height: 5),
-                          TextFormField(
-                            decoration: InputDecoration(
-                              hintText: 'nameHint'.tr,
-                              hintStyle: TextStyle(
-                                color: themeController.isDarkMode.value
-                                    ? Colors.white.withOpacity(0.59)
-                                    : Colors.black.withOpacity(0.59),
-                              ),
-                              border: OutlineInputBorder(),
-                              prefixIcon: Icon(Icons.person_outline),
-                              contentPadding: EdgeInsets.symmetric(
-                                horizontal: 15,
-                                vertical: 0,
-                              ),
-                            ),
-                          ),
-                          SizedBox(height: 10),
-                          Text(
-                            'Email',
-                            style: GoogleFonts.poppins(fontSize: 15),
-                          ),
-                          SizedBox(height: 5),
-                          TextFormField(
-                            decoration: InputDecoration(
-                              hintText: 'emailHint'.tr,
-                              hintStyle: TextStyle(
-                                color: themeController.isDarkMode.value
-                                    ? Colors.white.withOpacity(0.59)
-                                    : Colors.black.withOpacity(0.59),
-                              ),
-                              border: OutlineInputBorder(),
-                              prefixIcon: Icon(Icons.email_outlined),
-                              contentPadding: EdgeInsets.symmetric(
-                                horizontal: 15,
-                                vertical: 0,
-                              ),
-                            ),
-                          ),
-                          SizedBox(height: 10),
-                          Text(
-                            'Password',
-                            style: GoogleFonts.poppins(fontSize: 15),
-                          ),
-                          SizedBox(height: 5),
-                          TextFormField(
-                            obscureText: true,
-                            decoration: InputDecoration(
-                              hintText: 'passwordHint'.tr,
-                              hintStyle: TextStyle(
-                                color: themeController.isDarkMode.value
-                                    ? Colors.white.withOpacity(0.59)
-                                    : Colors.black.withOpacity(0.59),
-                              ),
-                              prefixIcon: Icon(Icons.lock_outline),
-                              suffixIcon: Icon(Icons.visibility_outlined),
-                              border: OutlineInputBorder(),
-
-                              contentPadding: EdgeInsets.symmetric(
-                                horizontal: 15,
-                                vertical: 0,
-                              ),
-                            ),
-                          ),
-
-                          SizedBox(height: 30),
                           SizedBox(
                             width: double.infinity,
                             height: 50,
@@ -245,7 +292,7 @@ class Register extends StatelessWidget {
                                 'registerButton'.tr,
                                 style: GoogleFonts.poppins(
                                   fontSize: 20,
-                                  fontWeight: FontWeight.w700,
+                                  fontWeight: CustomFontWeight.semiBold,
                                 ),
                               ),
                             ),
@@ -260,7 +307,7 @@ class Register extends StatelessWidget {
                       text: TextSpan(
                         style: GoogleFonts.poppins(
                           fontSize: 15,
-                          fontWeight: FontWeight.w500,
+                          fontWeight: CustomFontWeight.medium,
                           color: Theme.of(context).colorScheme.onPrimary,
                         ),
                         children: [
@@ -274,7 +321,7 @@ class Register extends StatelessWidget {
                             text: 'haveAccount1'.tr,
                             style: GoogleFonts.poppins(
                               color: Theme.of(context).colorScheme.secondary,
-                              fontWeight: FontWeight.bold,
+                              fontWeight: CustomFontWeight.bold,
                               decoration: TextDecoration.underline,
                             ),
                             recognizer: TapGestureRecognizer()
