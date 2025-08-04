@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:stocklyzer/appTheme.dart';
+import 'package:stocklyzer/config/appTheme.dart';
 import 'package:stocklyzer/controllers/onboardingController.dart';
 import 'package:stocklyzer/controllers/themeController.dart';
-import 'package:stocklyzer/language.dart';
-import 'package:stocklyzer/login.dart';
-import 'package:stocklyzer/onboarding.dart';
+import 'package:stocklyzer/config/language.dart';
+import 'package:stocklyzer/view/login.dart';
+import 'package:stocklyzer/view/onboarding.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
