@@ -5,10 +5,10 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:stocklyzer/config/appTheme.dart';
-import 'package:stocklyzer/controllers/loginController.dart';
 import 'package:stocklyzer/controllers/themeController.dart';
 import 'package:stocklyzer/config/extension.dart';
 import 'package:stocklyzer/view/register.dart';
+import 'package:stocklyzer/view/userPersonalization.dart';
 
 class Login extends StatelessWidget {
   Login({super.key});
@@ -16,7 +16,6 @@ class Login extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // final Logincontroller logincontroller = Get.put(Logincontroller());
     return Scaffold(
       body: Obx(() {
         return Container(
@@ -65,91 +64,38 @@ class Login extends StatelessWidget {
                                             color: Colors.white,
                                           ),
                                         ),
-                                  Row(
-                                    children: [
-                                      AnimatedToggleSwitch<bool>.dual(
-                                        current:
-                                            themeController.isDarkMode.value,
-                                        first: false,
-                                        second: true,
-                                        spacing: 4.0,
-                                        onChanged: (_) =>
-                                            themeController.toggleTheme(),
-                                        style: ToggleStyle(
-                                          borderRadius: BorderRadius.circular(
-                                            20.0,
-                                          ),
-                                          indicatorColor: Theme.of(
-                                            context,
-                                          ).primaryColor,
-                                          backgroundColor: Theme.of(
-                                            context,
-                                          ).colorScheme.background,
-                                          indicatorBorder: Border.all(
-                                            color: Theme.of(
-                                              context,
-                                            ).primaryColor,
-                                            width: 3,
-                                          ),
-                                          borderColor: Colors.transparent,
-                                        ),
-                                        iconBuilder: (value) => value
-                                            ? Icon(
-                                                Icons.nightlight_round,
-                                                color: Color(0xFF01353D),
-                                              )
-                                            : Icon(
-                                                Icons.wb_sunny,
-                                                color: Colors.yellow,
-                                              ),
-
-                                        height: 40,
-                                        indicatorSize: const Size.square(35),
-
-                                        animationDuration: const Duration(
-                                          milliseconds: 250,
-                                        ),
+                                  Obx(
+                                    () => AnimatedToggleSwitch<bool>.size(
+                                      current: themeController.isEnglish.value,
+                                      values: const [false, true],
+                                      height: 30,
+                                      indicatorSize: const Size(45, 25),
+                                      iconOpacity: 1.0,
+                                      animationDuration: const Duration(
+                                        milliseconds: 300,
                                       ),
-                                      Obx(
-                                        () => AnimatedToggleSwitch<bool>.size(
-                                          current:
-                                              themeController.isEnglish.value,
-                                          values: const [false, true],
+                                      style: ToggleStyle(
+                                        backgroundColor: Theme.of(
+                                          context,
+                                        ).colorScheme.background,
+                                        indicatorColor: Colors.transparent,
+                                        borderColor: Colors.transparent,
+                                        borderRadius: BorderRadius.circular(6),
+                                      ),
+
+                                      onChanged: themeController.toggleLanguage,
+                                      iconBuilder: (value) => ClipRRect(
+                                        borderRadius: BorderRadius.circular(6),
+                                        child: Image.asset(
+                                          value
+                                              ? 'assets/EN.png'
+                                              : 'assets/ID.png',
+                                          fit: BoxFit.cover,
+                                          width: 30,
                                           height: 30,
-                                          indicatorSize: const Size(45, 25),
-                                          iconOpacity: 1.0,
-                                          animationDuration: const Duration(
-                                            milliseconds: 300,
-                                          ),
-                                          style: ToggleStyle(
-                                            backgroundColor: Theme.of(
-                                              context,
-                                            ).colorScheme.background,
-                                            indicatorColor: Colors.transparent,
-                                            borderColor: Colors.transparent,
-                                            borderRadius: BorderRadius.circular(
-                                              6,
-                                            ),
-                                          ),
-
-                                          onChanged:
-                                              themeController.toggleLanguage,
-                                          iconBuilder: (value) => ClipRRect(
-                                            borderRadius: BorderRadius.circular(
-                                              6,
-                                            ),
-                                            child: Image.asset(
-                                              value
-                                                  ? 'assets/EN.png'
-                                                  : 'assets/ID.png',
-                                              fit: BoxFit.cover,
-                                              width: 30,
-                                              height: 30,
-                                            ),
-                                          ),
                                         ),
                                       ),
-                                    ],
+                                    ),
                                   ),
                                 ],
                               ),
@@ -259,7 +205,9 @@ class Login extends StatelessWidget {
                                 width: double.infinity,
                                 height: 50,
                                 child: ElevatedButton(
-                                  onPressed: () {},
+                                  onPressed: () {
+                                    Get.to(() => Userpersonalization());
+                                  },
                                   style: ElevatedButton.styleFrom(
                                     backgroundColor: Theme.of(
                                       context,

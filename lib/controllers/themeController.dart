@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -23,15 +24,19 @@ class Themecontroller extends GetxController {
   }
 
   Future<void> loadTheme() async {
-    final prefs = await SharedPreferences.getInstance();
-    isDarkMode.value = prefs.getBool('isDarkMode') ?? true;
+    var brightness =
+        SchedulerBinding.instance.platformDispatcher.platformBrightness;
+    isDarkMode.value = brightness == Brightness.dark;
     Get.changeThemeMode(isDarkMode.value ? ThemeMode.dark : ThemeMode.light);
-  }
 
-  Future<void> toggleTheme() async {
-    isDarkMode.value = !isDarkMode.value;
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setBool('isDarkMode', isDarkMode.value);
-    Get.changeThemeMode(isDarkMode.value ? ThemeMode.dark : ThemeMode.light);
+    SchedulerBinding
+        .instance
+        .platformDispatcher
+        .onPlatformBrightnessChanged = () {
+      var newBrightness =
+          SchedulerBinding.instance.platformDispatcher.platformBrightness;
+      isDarkMode.value = newBrightness == Brightness.dark;
+      Get.changeThemeMode(isDarkMode.value ? ThemeMode.dark : ThemeMode.light);
+    };
   }
 }
