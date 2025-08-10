@@ -28,6 +28,12 @@ class Language extends Translations {
       'onboardingDesc3':
           'Keep an eye on your favorite stocks by saving them to a personalized watchlist with ease',
       'swipe': 'SWIPE TO EXPLORE',
+      'userPersonaTitle': 'First,',
+      'userPersonaTitle1': 'Watchlist your Stocks !',
+      'bank': 'Banks',
+      'commodity': 'Commodity',
+      'energy': 'Energy',
+      'skipButton': 'Skip',
     },
     'id': {
       'registerTitle': 'Ayo Mulai!',
@@ -54,6 +60,12 @@ class Language extends Translations {
       'onboardingDesc3':
           'Pantau saham favoritmu dengan mudah lewat watchlist pribadi.',
       'swipe': 'GESER UNTUK JELAJAHI',
+      'userPersonaTitle': 'Sebelum itu,',
+      'userPersonaTitle1': 'Watchlist saham kamu !',
+      'bank': 'Perbankan',
+      'commodity': 'Komoditas',
+      'energy': 'Energi',
+      'skipButton': 'Lewati',
     },
   };
 }

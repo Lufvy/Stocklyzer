@@ -63,91 +63,38 @@ class Register extends StatelessWidget {
                                             color: Colors.white,
                                           ),
                                         ),
-                                  Row(
-                                    children: [
-                                      AnimatedToggleSwitch<bool>.dual(
-                                        current:
-                                            themeController.isDarkMode.value,
-                                        first: false,
-                                        second: true,
-                                        spacing: 4.0,
-                                        onChanged: (_) =>
-                                            themeController.toggleTheme(),
-                                        style: ToggleStyle(
-                                          borderRadius: BorderRadius.circular(
-                                            20.0,
-                                          ),
-                                          indicatorColor: Theme.of(
-                                            context,
-                                          ).primaryColor,
-                                          backgroundColor: Theme.of(
-                                            context,
-                                          ).colorScheme.background,
-                                          indicatorBorder: Border.all(
-                                            color: Theme.of(
-                                              context,
-                                            ).primaryColor,
-                                            width: 3,
-                                          ),
-                                          borderColor: Colors.transparent,
-                                        ),
-                                        iconBuilder: (value) => value
-                                            ? Icon(
-                                                Icons.nightlight_round,
-                                                color: Color(0xFF01353D),
-                                              )
-                                            : Icon(
-                                                Icons.wb_sunny,
-                                                color: Colors.yellow,
-                                              ),
-
-                                        height: 40,
-                                        indicatorSize: const Size.square(35),
-
-                                        animationDuration: const Duration(
-                                          milliseconds: 250,
-                                        ),
+                                  Obx(
+                                    () => AnimatedToggleSwitch<bool>.size(
+                                      current: themeController.isEnglish.value,
+                                      values: const [false, true],
+                                      height: 30,
+                                      indicatorSize: const Size(45, 25),
+                                      iconOpacity: 1.0,
+                                      animationDuration: const Duration(
+                                        milliseconds: 300,
                                       ),
-                                      Obx(
-                                        () => AnimatedToggleSwitch<bool>.size(
-                                          current:
-                                              themeController.isEnglish.value,
-                                          values: const [false, true],
+                                      style: ToggleStyle(
+                                        backgroundColor: Theme.of(
+                                          context,
+                                        ).colorScheme.background,
+                                        indicatorColor: Colors.transparent,
+                                        borderColor: Colors.transparent,
+                                        borderRadius: BorderRadius.circular(6),
+                                      ),
+
+                                      onChanged: themeController.toggleLanguage,
+                                      iconBuilder: (value) => ClipRRect(
+                                        borderRadius: BorderRadius.circular(6),
+                                        child: Image.asset(
+                                          value
+                                              ? 'assets/EN.png'
+                                              : 'assets/ID.png',
+                                          fit: BoxFit.cover,
+                                          width: 30,
                                           height: 30,
-                                          indicatorSize: const Size(45, 25),
-                                          iconOpacity: 1.0,
-                                          animationDuration: const Duration(
-                                            milliseconds: 300,
-                                          ),
-                                          style: ToggleStyle(
-                                            backgroundColor: Theme.of(
-                                              context,
-                                            ).colorScheme.background,
-                                            indicatorColor: Colors.transparent,
-                                            borderColor: Colors.transparent,
-                                            borderRadius: BorderRadius.circular(
-                                              6,
-                                            ),
-                                          ),
-
-                                          onChanged:
-                                              themeController.toggleLanguage,
-                                          iconBuilder: (value) => ClipRRect(
-                                            borderRadius: BorderRadius.circular(
-                                              6,
-                                            ),
-                                            child: Image.asset(
-                                              value
-                                                  ? 'assets/EN.png'
-                                                  : 'assets/ID.png',
-                                              fit: BoxFit.cover,
-                                              width: 30,
-                                              height: 30,
-                                            ),
-                                          ),
                                         ),
                                       ),
-                                    ],
+                                    ),
                                   ),
                                 ],
                               ),
@@ -301,7 +248,6 @@ class Register extends StatelessWidget {
                       ),
                     ),
                   ),
-                  // Spacer(),
                   Center(
                     child: RichText(
                       text: TextSpan(

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:stocklyzer/config/extension.dart';
 
 class Apptheme {
   static const LinearGradient lightGradient = LinearGradient(
@@ -21,16 +22,19 @@ class Apptheme {
       scaffoldBackgroundColor: Colors.transparent,
       primaryColor: Colors.white,
 
+      // splashColor: Colors.transparent,
+      highlightColor: Colors.transparent,
+
       colorScheme: ColorScheme.dark(
         primary: Color(0XFF007283),
         secondary: Colors.black,
         background: Color(0XFF007283),
         onPrimary: Colors.white,
         onSecondary: Color(0XFF01353D),
-
+        onPrimaryContainer: Colors.white,
         // onPrimaryContainer: ,
         // onSecondaryContainer: ,
-        // primaryContainer: ,
+        primaryContainer: Colors.black.withOpacity(0.13),
         // secondaryContainer: ,
         // outline: ,
         // surface: Color(0XFF000000).withOpacity(0.4),
@@ -49,7 +53,22 @@ class Apptheme {
         selectionColor: Colors.white,
         selectionHandleColor: Colors.white,
       ),
-
+      bottomNavigationBarTheme: BottomNavigationBarThemeData(
+        elevation: 0,
+        backgroundColor: Colors.black.withOpacity(0.56),
+        selectedItemColor: Color(0XFF00C9E7),
+        unselectedItemColor: Colors.white.withOpacity(0.75),
+        selectedLabelStyle: GoogleFonts.poppins(
+          color: Color(0XFF00C9E7),
+          fontSize: 13,
+          fontWeight: CustomFontWeight.medium,
+        ),
+        unselectedLabelStyle: GoogleFonts.poppins(
+          color: Colors.white,
+          fontSize: 13,
+          fontWeight: CustomFontWeight.medium,
+        ),
+      ),
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
         fillColor: Colors.transparent,
@@ -61,6 +80,8 @@ class Apptheme {
           borderSide: BorderSide(color: Colors.white),
         ),
       ),
+
+      dialogTheme: DialogThemeData(backgroundColor: Colors.white),
     );
   }
 
@@ -70,16 +91,36 @@ class Apptheme {
       scaffoldBackgroundColor: Colors.white,
       primaryColor: Color(0XFF007283),
 
-      colorScheme: const ColorScheme.light(
+      // splashColor: Colors.transparent,
+      highlightColor: Colors.transparent,
+      colorScheme: ColorScheme.light(
         primary: Colors.white,
         secondary: Color(0XFF01ABC4),
         onPrimary: Colors.black,
         background: Color(0XFFBBBBBB),
         onSecondary: Color(0XFF01353D),
+        primaryContainer: Color(0XFFB5B5B5).withOpacity(0.31),
+        onPrimaryContainer: Color(0XFF65B4BF),
       ),
       iconTheme: IconThemeData(color: Colors.black.withOpacity(0.50)),
-
       textTheme: GoogleFonts.poppinsTextTheme().apply(bodyColor: Colors.black),
+
+      bottomNavigationBarTheme: BottomNavigationBarThemeData(
+        elevation: 0.1,
+        backgroundColor: Colors.white.withOpacity(0.8),
+        selectedItemColor: Color(0XFF00C9E7),
+        unselectedItemColor: Colors.black.withOpacity(0.50),
+        selectedLabelStyle: GoogleFonts.poppins(
+          color: Color(0XFF00C9E7),
+          fontSize: 13,
+          fontWeight: CustomFontWeight.medium,
+        ),
+        unselectedLabelStyle: GoogleFonts.poppins(
+          color: Colors.white,
+          fontSize: 13,
+          fontWeight: CustomFontWeight.medium,
+        ),
+      ),
 
       textSelectionTheme: TextSelectionThemeData(
         cursorColor: Color(0XFF007283),
@@ -96,6 +137,8 @@ class Apptheme {
           borderSide: BorderSide(color: Colors.black),
         ),
       ),
+
+      dialogTheme: DialogThemeData(backgroundColor: Colors.white),
     );
   }
 }

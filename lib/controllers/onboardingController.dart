@@ -12,6 +12,7 @@ class Onboardingcontroller extends GetxController {
     'assets/onboarding2.png',
     'assets/onboarding3.png',
   ];
+
   final List<String> title = [
     'onboardingTitle1',
     'onboardingTitle2',
@@ -25,15 +26,17 @@ class Onboardingcontroller extends GetxController {
   ];
 
   Timer? timer;
-
   @override
   void onInit() {
     super.onInit();
-    startAutoSlide();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      startAutoSlide();
+    });
   }
 
   void startAutoSlide() {
     timer = Timer.periodic(Duration(seconds: 3), (timer) {
+      if (!pageController.hasClients) return;
       int nextPage = currentPage.value + 1;
 
       if (nextPage >= images.length) {

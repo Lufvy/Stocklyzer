@@ -169,7 +169,6 @@ class Onboarding extends StatelessWidget {
                         width: MediaQuery.of(context).size.width * 0.5,
                         height: MediaQuery.of(context).size.height * 0.2,
                         decoration: BoxDecoration(
-                          // color: Colors.white,
                           borderRadius: BorderRadius.circular(20),
                           image: DecorationImage(
                             image: AssetImage(
@@ -207,100 +206,77 @@ class Onboarding extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
       child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          themeController.isDarkMode.value
-              ? SvgPicture.asset('assets/Logo.svg', width: 45, height: 45)
-              : ShaderMask(
-                  shaderCallback: (bounds) => LinearGradient(
-                    colors: [Color(0XFF01353D), Color(0XFF007283)],
-                    stops: [0.2, 0.75],
-                    begin: Alignment.topCenter,
-                    end: Alignment.bottomCenter,
-                  ).createShader(bounds),
-                  blendMode: BlendMode.srcIn,
-                  child: SvgPicture.asset(
-                    'assets/Logo.svg',
-                    color: Colors.white,
-                    width: 45,
-                    height: 45,
-                  ),
-                ),
-          SizedBox(width: 10),
-          Text.rich(
-            TextSpan(
-              text: 'Stock',
-              style: GoogleFonts.poppins(
-                fontSize: 20,
-                color: Color(0XFF01ABC4),
-                fontWeight: FontWeight.bold,
-              ),
-              children: [
-                TextSpan(
-                  text: 'Lyzer',
-                  style: GoogleFonts.poppins(
-                    fontWeight: FontWeight.bold,
-                    color: Theme.of(context).colorScheme.onPrimary,
-                  ),
-                ),
-              ],
-            ),
-          ),
-          SizedBox(width: 20),
           Row(
             children: [
-              AnimatedToggleSwitch<bool>.dual(
-                current: themeController.isDarkMode.value,
-                first: false,
-                second: true,
-                spacing: 4.0,
-                onChanged: (_) => themeController.toggleTheme(),
-                style: ToggleStyle(
-                  borderRadius: BorderRadius.circular(20.0),
-                  indicatorColor: Theme.of(context).primaryColor,
-                  backgroundColor: Theme.of(context).colorScheme.background,
-                  indicatorBorder: Border.all(
-                    color: Theme.of(context).primaryColor,
-                    width: 3,
-                  ),
-                  borderColor: Colors.transparent,
-                ),
-                iconBuilder: (value) => value
-                    ? Icon(Icons.nightlight_round, color: Color(0xFF01353D))
-                    : Icon(Icons.wb_sunny, color: Colors.yellow),
-
-                height: 40,
-                indicatorSize: const Size.square(35),
-
-                animationDuration: const Duration(milliseconds: 250),
-              ),
-              Obx(
-                () => AnimatedToggleSwitch<bool>.size(
-                  current: themeController.isEnglish.value,
-                  values: const [false, true],
-                  height: 30,
-                  indicatorSize: const Size(45, 25),
-                  iconOpacity: 1.0,
-                  animationDuration: const Duration(milliseconds: 300),
-                  style: ToggleStyle(
-                    backgroundColor: Theme.of(context).colorScheme.background,
-                    indicatorColor: Colors.transparent,
-                    borderColor: Colors.transparent,
-                    borderRadius: BorderRadius.circular(6),
-                  ),
-
-                  onChanged: themeController.toggleLanguage,
-                  iconBuilder: (value) => ClipRRect(
-                    borderRadius: BorderRadius.circular(6),
-                    child: Image.asset(
-                      value ? 'assets/EN.png' : 'assets/ID.png',
-                      fit: BoxFit.cover,
-                      width: 30,
-                      height: 30,
+              themeController.isDarkMode.value
+                  ? SvgPicture.asset('assets/Logo.svg', width: 45, height: 45)
+                  : ShaderMask(
+                      shaderCallback: (bounds) => LinearGradient(
+                        colors: [Color(0XFF01353D), Color(0XFF007283)],
+                        stops: [0.2, 0.75],
+                        begin: Alignment.topCenter,
+                        end: Alignment.bottomCenter,
+                      ).createShader(bounds),
+                      blendMode: BlendMode.srcIn,
+                      child: SvgPicture.asset(
+                        'assets/Logo.svg',
+                        color: Colors.white,
+                        width: 45,
+                        height: 45,
+                      ),
                     ),
+              SizedBox(width: 10),
+              Text.rich(
+                TextSpan(
+                  text: 'Stock',
+                  style: GoogleFonts.poppins(
+                    fontSize: 20,
+                    color: Color(0XFF01ABC4),
+                    fontWeight: FontWeight.bold,
                   ),
+                  children: [
+                    TextSpan(
+                      text: 'Lyzer',
+                      style: GoogleFonts.poppins(
+                        fontWeight: FontWeight.bold,
+                        color: Theme.of(context).colorScheme.onPrimary,
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ],
+          ),
+
+          SizedBox(width: 20),
+          Obx(
+            () => AnimatedToggleSwitch<bool>.size(
+              current: themeController.isEnglish.value,
+              values: const [false, true],
+              height: 30,
+              indicatorSize: const Size(45, 25),
+              iconOpacity: 1.0,
+              animationDuration: const Duration(milliseconds: 300),
+              style: ToggleStyle(
+                backgroundColor: Theme.of(context).colorScheme.background,
+                indicatorColor: Colors.transparent,
+                borderColor: Colors.transparent,
+                borderRadius: BorderRadius.circular(6),
+              ),
+
+              onChanged: themeController.toggleLanguage,
+              iconBuilder: (value) => ClipRRect(
+                borderRadius: BorderRadius.circular(6),
+                child: Image.asset(
+                  value ? 'assets/EN.png' : 'assets/ID.png',
+                  fit: BoxFit.cover,
+                  width: 30,
+                  height: 30,
+                ),
+              ),
+            ),
           ),
         ],
       ),
