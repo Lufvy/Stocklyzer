@@ -3,11 +3,11 @@ import 'package:get/get.dart';
 class Userpersonalizationcontroller extends GetxController {
   final watchlist = <Map<String, dynamic>>[
     {'name': 'BBCA', 'selected': false},
-    {'name': 'BBCA', 'selected': false},
-    {'name': 'BBCA', 'selected': false},
-    {'name': 'BBCA', 'selected': false},
-    {'name': 'BBCA', 'selected': false},
-    {'name': 'BBCA', 'selected': false},
+    {'name': 'BBRI', 'selected': false},
+    {'name': 'INCO', 'selected': false},
+    {'name': 'ADMR', 'selected': false},
+    {'name': 'BBTN', 'selected': false},
+    {'name': 'KLBF', 'selected': false},
   ].obs;
 
   List<String> get selectedwatchList => watchlist

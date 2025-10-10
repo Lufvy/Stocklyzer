@@ -27,11 +27,13 @@ class Userpersonalization extends StatelessWidget {
                 : Apptheme.lightGradient,
           ),
           child: SafeArea(
+            bottom: false,
             child: Padding(
               padding: const EdgeInsets.all(20),
               child: Stack(
                 children: [
                   SingleChildScrollView(
+                    padding: const EdgeInsets.only(bottom: 65),
                     child: Column(
                       spacing: 13,
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -150,8 +152,9 @@ class Userpersonalization extends StatelessWidget {
 
                                             children: [
                                               Image.asset(
-                                                'assets/${stock['name']}.png',
-                                                scale: 3,
+                                                'assets/tickers/${stock['name']}.png',
+                                                width: 47,
+                                                height: 47,
                                               ),
                                               Text(
                                                 '${stock['name']}',
@@ -266,8 +269,9 @@ class Userpersonalization extends StatelessWidget {
 
                                             children: [
                                               Image.asset(
-                                                'assets/${stock['name']}.png',
-                                                scale: 3,
+                                                'assets/tickers/${stock['name']}.png',
+                                                width: 47,
+                                                height: 47,
                                               ),
                                               Text(
                                                 '${stock['name']}',
@@ -382,8 +386,9 @@ class Userpersonalization extends StatelessWidget {
 
                                             children: [
                                               Image.asset(
-                                                'assets/${stock['name']}.png',
-                                                scale: 3,
+                                                'assets/tickers/${stock['name']}.png',
+                                                width: 47,
+                                                height: 47,
                                               ),
                                               Text(
                                                 '${stock['name']}',
@@ -414,8 +419,8 @@ class Userpersonalization extends StatelessWidget {
                     ),
                   ),
                   Positioned(
-                    bottom: 0,
-                    right: 0,
+                    bottom: 25,
+                    right: 15,
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Color(0XFF01353D),
