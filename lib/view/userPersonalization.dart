@@ -3,8 +3,8 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:stocklyzer/config/appTheme.dart';
 import 'package:stocklyzer/config/extension.dart';
-import 'package:stocklyzer/controllers/themeController.dart';
-import 'package:stocklyzer/controllers/userPersonalizationController.dart';
+import 'package:stocklyzer/controller/themeController.dart';
+import 'package:stocklyzer/controller/userPersonalizationController.dart';
 import 'package:stocklyzer/view/navBar.dart';
 
 class Userpersonalization extends StatelessWidget {
@@ -13,6 +13,29 @@ class Userpersonalization extends StatelessWidget {
   final userPersonalizationController = Get.put(
     Userpersonalizationcontroller(),
   );
+
+  Widget watchListTitleHeader() {
+    return Column(
+      spacing: 10,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          'userPersonaTitle'.tr,
+          style: GoogleFonts.poppins(
+            fontSize: 20,
+            fontWeight: CustomFontWeight.bold,
+          ),
+        ),
+        Text(
+          'userPersonaTitle1'.tr,
+          style: GoogleFonts.poppins(
+            fontSize: 24,
+            fontWeight: CustomFontWeight.bold,
+          ),
+        ),
+      ],
+    );
+  }
 
   Widget watchlistSection(BuildContext context, String title) {
     return Column(
@@ -116,29 +139,6 @@ class Userpersonalization extends StatelessWidget {
           ],
         ),
       ),
-    );
-  }
-
-  Widget watchListTitleHeader() {
-    return Column(
-      spacing: 10,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          'userPersonaTitle'.tr,
-          style: GoogleFonts.poppins(
-            fontSize: 20,
-            fontWeight: CustomFontWeight.bold,
-          ),
-        ),
-        Text(
-          'userPersonaTitle1'.tr,
-          style: GoogleFonts.poppins(
-            fontSize: 24,
-            fontWeight: CustomFontWeight.bold,
-          ),
-        ),
-      ],
     );
   }
 

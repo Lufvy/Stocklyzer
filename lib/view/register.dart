@@ -4,9 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:stocklyzer/component/logo.dart';
 import 'package:stocklyzer/config/appTheme.dart';
 import 'package:stocklyzer/config/extension.dart';
-import 'package:stocklyzer/controllers/themeController.dart';
+import 'package:stocklyzer/controller/themeController.dart';
 import 'package:stocklyzer/view/login.dart';
 
 class Register extends StatelessWidget {
@@ -44,25 +45,7 @@ class Register extends StatelessWidget {
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
                                 children: [
-                                  themeController.isDarkMode.value
-                                      ? SvgPicture.asset('assets/Logo.svg')
-                                      : ShaderMask(
-                                          shaderCallback: (bounds) =>
-                                              LinearGradient(
-                                                colors: [
-                                                  Color(0XFF01353D),
-                                                  Color(0XFF007283),
-                                                ],
-                                                stops: [0.2, 0.75],
-                                                begin: Alignment.topCenter,
-                                                end: Alignment.bottomCenter,
-                                              ).createShader(bounds),
-                                          blendMode: BlendMode.srcIn,
-                                          child: SvgPicture.asset(
-                                            'assets/Logo.svg',
-                                            color: Colors.white,
-                                          ),
-                                        ),
+                                  Logo(size: 75),
                                   Obx(
                                     () => AnimatedToggleSwitch<bool>.size(
                                       current: themeController.isEnglish.value,

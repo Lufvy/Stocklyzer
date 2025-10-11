@@ -5,7 +5,7 @@ import 'package:get/get.dart';
 import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:stocklyzer/config/extension.dart';
-import 'package:stocklyzer/controllers/navBarController.dart';
+import 'package:stocklyzer/controller/navBarController.dart';
 import 'package:stocklyzer/view/home.dart';
 import 'package:stocklyzer/view/profile.dart';
 import 'package:stocklyzer/view/search.dart';
@@ -84,6 +84,7 @@ class _NavbarState extends State<Navbar> {
   void warningDialog() {
     Get.dialog(
       Dialog(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
         child: Padding(
           padding: const EdgeInsets.all(20),
           child: Column(
