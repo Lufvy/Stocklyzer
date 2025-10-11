@@ -4,9 +4,10 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
+import 'package:stocklyzer/component/logo.dart';
 import 'package:stocklyzer/config/appTheme.dart';
-import 'package:stocklyzer/controllers/onboardingController.dart';
-import 'package:stocklyzer/controllers/themeController.dart';
+import 'package:stocklyzer/controller/onboardingController.dart';
+import 'package:stocklyzer/controller/themeController.dart';
 import 'package:stocklyzer/config/extension.dart';
 import 'package:stocklyzer/view/login.dart';
 import 'package:stocklyzer/view/register.dart';
@@ -210,23 +211,7 @@ class Onboarding extends StatelessWidget {
         children: [
           Row(
             children: [
-              themeController.isDarkMode.value
-                  ? SvgPicture.asset('assets/Logo.svg', width: 45, height: 45)
-                  : ShaderMask(
-                      shaderCallback: (bounds) => LinearGradient(
-                        colors: [Color(0XFF01353D), Color(0XFF007283)],
-                        stops: [0.2, 0.75],
-                        begin: Alignment.topCenter,
-                        end: Alignment.bottomCenter,
-                      ).createShader(bounds),
-                      blendMode: BlendMode.srcIn,
-                      child: SvgPicture.asset(
-                        'assets/Logo.svg',
-                        color: Colors.white,
-                        width: 45,
-                        height: 45,
-                      ),
-                    ),
+              Logo(size: 44),
               SizedBox(width: 10),
               Text.rich(
                 TextSpan(

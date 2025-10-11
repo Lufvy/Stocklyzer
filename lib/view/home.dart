@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:stocklyzer/config/appTheme.dart';
-import 'package:stocklyzer/controllers/themeController.dart';
+import 'package:stocklyzer/controller/themeController.dart';
 
 class Home extends StatelessWidget {
   Home({super.key});
