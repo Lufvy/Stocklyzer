@@ -4,9 +4,11 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
+import 'package:stocklyzer/component/languageToggleButton.dart';
+import 'package:stocklyzer/component/logo.dart';
 import 'package:stocklyzer/config/appTheme.dart';
-import 'package:stocklyzer/controllers/onboardingController.dart';
-import 'package:stocklyzer/controllers/themeController.dart';
+import 'package:stocklyzer/controller/onboardingController.dart';
+import 'package:stocklyzer/controller/themeController.dart';
 import 'package:stocklyzer/config/extension.dart';
 import 'package:stocklyzer/view/login.dart';
 import 'package:stocklyzer/view/register.dart';
@@ -210,23 +212,7 @@ class Onboarding extends StatelessWidget {
         children: [
           Row(
             children: [
-              themeController.isDarkMode.value
-                  ? SvgPicture.asset('assets/Logo.svg', width: 45, height: 45)
-                  : ShaderMask(
-                      shaderCallback: (bounds) => LinearGradient(
-                        colors: [Color(0XFF01353D), Color(0XFF007283)],
-                        stops: [0.2, 0.75],
-                        begin: Alignment.topCenter,
-                        end: Alignment.bottomCenter,
-                      ).createShader(bounds),
-                      blendMode: BlendMode.srcIn,
-                      child: SvgPicture.asset(
-                        'assets/Logo.svg',
-                        color: Colors.white,
-                        width: 45,
-                        height: 45,
-                      ),
-                    ),
+              Logo(size: 44),
               SizedBox(width: 10),
               Text.rich(
                 TextSpan(
@@ -251,33 +237,36 @@ class Onboarding extends StatelessWidget {
           ),
 
           SizedBox(width: 20),
-          Obx(
-            () => AnimatedToggleSwitch<bool>.size(
-              current: themeController.isEnglish.value,
-              values: const [false, true],
-              height: 30,
-              indicatorSize: const Size(45, 25),
-              iconOpacity: 1.0,
-              animationDuration: const Duration(milliseconds: 300),
-              style: ToggleStyle(
-                backgroundColor: Theme.of(context).colorScheme.background,
-                indicatorColor: Colors.transparent,
-                borderColor: Colors.transparent,
-                borderRadius: BorderRadius.circular(6),
-              ),
+          // TODO: Language Toggle Button di refactor masukkin ke component
+          // Possibly di ubah design nya buat nanti, sekalian samain aja sama yang ada di profile.dart
+          Languagetogglebutton(),
+          // Obx(
+          //   () => AnimatedToggleSwitch<bool>.size(
+          //     current: themeController.isEnglish.value,
+          //     values: const [false, true],
+          //     height: 30,
+          //     indicatorSize: const Size(45, 25),
+          //     iconOpacity: 1.0,
+          //     animationDuration: const Duration(milliseconds: 300),
+          //     style: ToggleStyle(
+          //       backgroundColor: Theme.of(context).colorScheme.background,
+          //       indicatorColor: Colors.transparent,
+          //       borderColor: Colors.transparent,
+          //       borderRadius: BorderRadius.circular(6),
+          //     ),
 
-              onChanged: themeController.toggleLanguage,
-              iconBuilder: (value) => ClipRRect(
-                borderRadius: BorderRadius.circular(6),
-                child: Image.asset(
-                  value ? 'assets/EN.png' : 'assets/ID.png',
-                  fit: BoxFit.cover,
-                  width: 30,
-                  height: 30,
-                ),
-              ),
-            ),
-          ),
+          //     onChanged: themeController.toggleLanguage,
+          //     iconBuilder: (value) => ClipRRect(
+          //       borderRadius: BorderRadius.circular(6),
+          //       child: Image.asset(
+          //         value ? 'assets/EN.png' : 'assets/ID.png',
+          //         fit: BoxFit.cover,
+          //         width: 30,
+          //         height: 30,
+          //       ),
+          //     ),
+          //   ),
+          // ),
         ],
       ),
     );

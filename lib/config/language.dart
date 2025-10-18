@@ -34,6 +34,11 @@ class Language extends Translations {
       'commodity': 'Commodity',
       'energy': 'Energy',
       'skipButton': 'Skip',
+      'profile': 'Profile',
+      'language': 'Language',
+      'logout': 'Logout',
+      'logoutDialogTitle': 'Logout from Stocklyzer ?',
+      'cancel': 'Cancel',
     },
     'id': {
       'registerTitle': 'Ayo Mulai!',
@@ -66,6 +71,11 @@ class Language extends Translations {
       'commodity': 'Komoditas',
       'energy': 'Energi',
       'skipButton': 'Lewati',
+      'profile': 'Profil',
+      'language': 'Bahasa',
+      'logout': 'Keluar',
+      'logoutDialogTitle': 'Keluar dari Stocklyzer ?',
+      'cancel': 'Batal',
     },
   };
 }
