@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:stocklyzer/component/languageToggleButton.dart';
 import 'package:stocklyzer/component/logo.dart';
 import 'package:stocklyzer/config/appTheme.dart';
 import 'package:stocklyzer/config/extension.dart';
@@ -97,14 +98,8 @@ class Profile extends StatelessWidget {
           ),
 
           // Button toggle bahasa
-          Switch(
-            value: isLanguageButtonToggled,
-            activeColor: Color.fromARGB(255, 25, 197, 97),
-            onChanged: (value) {
-              isLanguageButtonToggled = value;
-              themeController.toggleLanguage(value);
-            },
-          ),
+          // TODO: Pake component yang ada di onboarding.dart aja, samain aja di design nya
+          Languagetogglebutton(),
         ],
       ),
     );
