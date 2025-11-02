@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:stocklyzer/component/languageToggleButton.dart';
@@ -15,7 +14,40 @@ class Profile extends StatelessWidget {
   Profile({super.key});
   final themeController = Get.find<Themecontroller>();
 
-  bool isLanguageButtonToggled = false;
+  // bool isLanguageButtonToggled = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Obx(
+        () => Container(
+          width: double.infinity,
+          height: double.infinity,
+          decoration: BoxDecoration(
+            gradient: themeController.isDarkMode.value
+                ? Apptheme.darkGradient
+                : Apptheme.lightGradient,
+          ),
+          child: SafeArea(
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(34, 0, 34, 0),
+              child: Column(
+                spacing: 40,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  profileHeader(context),
+                  Column(
+                    spacing: 20,
+                    children: [languageButton(context), logoutButton()],
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
 
   Widget profileHeader(BuildContext context) {
     return Column(
@@ -166,7 +198,7 @@ class Profile extends StatelessWidget {
   }
 
   void onLogout() {
-    Get.to(() => Login());
+    Get.offAll(() => Login());
   }
 
   Widget logoutButton() {
@@ -199,39 +231,6 @@ class Profile extends StatelessWidget {
               ),
             ),
           ],
-        ),
-      ),
-    );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: Obx(
-        () => Container(
-          width: double.infinity,
-          height: double.infinity,
-          decoration: BoxDecoration(
-            gradient: themeController.isDarkMode.value
-                ? Apptheme.darkGradient
-                : Apptheme.lightGradient,
-          ),
-          child: SafeArea(
-            child: Padding(
-              padding: const EdgeInsets.fromLTRB(34, 0, 34, 0),
-              child: Column(
-                spacing: 40,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  profileHeader(context),
-                  Column(
-                    spacing: 20,
-                    children: [languageButton(context), logoutButton()],
-                  ),
-                ],
-              ),
-            ),
-          ),
         ),
       ),
     );

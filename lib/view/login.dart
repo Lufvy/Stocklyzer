@@ -1,7 +1,5 @@
-import 'package:animated_toggle_switch/animated_toggle_switch.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:stocklyzer/component/languageToggleButton.dart';
@@ -65,20 +63,18 @@ class Login extends StatelessWidget {
                             spacing: 10,
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    'login'.tr,
-                                    style: GoogleFonts.poppins(
-                                      fontSize: 20,
-                                      fontWeight: CustomFontWeight.semiBold,
+                              IntrinsicWidth(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      'login'.tr,
+                                      style: GoogleFonts.poppins(
+                                        fontSize: 20,
+                                        fontWeight: CustomFontWeight.semiBold,
+                                      ),
                                     ),
-                                  ),
-                                  SizedBox(height: 5),
-                                  FractionallySizedBox(
-                                    widthFactor: 0.2,
-                                    child: Container(
+                                    Container(
                                       height: 3,
                                       decoration: BoxDecoration(
                                         borderRadius: BorderRadius.circular(3),
@@ -87,8 +83,8 @@ class Login extends StatelessWidget {
                                         ).colorScheme.onPrimary,
                                       ),
                                     ),
-                                  ),
-                                ],
+                                  ],
+                                ),
                               ),
 
                               Column(
@@ -104,8 +100,12 @@ class Login extends StatelessWidget {
                                       hintText: 'emailHint'.tr,
                                       hintStyle: TextStyle(
                                         color: themeController.isDarkMode.value
-                                            ? Colors.white.withOpacity(0.59)
-                                            : Colors.black.withOpacity(0.59),
+                                            ? Colors.white.withValues(
+                                                alpha: 0.59,
+                                              )
+                                            : Colors.black.withValues(
+                                                alpha: 0.59,
+                                              ),
                                       ),
                                       border: OutlineInputBorder(),
                                       prefixIcon: Icon(Icons.email_outlined),
@@ -131,8 +131,12 @@ class Login extends StatelessWidget {
                                       hintText: 'passwordHint'.tr,
                                       hintStyle: TextStyle(
                                         color: themeController.isDarkMode.value
-                                            ? Colors.white.withOpacity(0.59)
-                                            : Colors.black.withOpacity(0.59),
+                                            ? Colors.white.withValues(
+                                                alpha: 0.59,
+                                              )
+                                            : Colors.black.withValues(
+                                                alpha: 0.59,
+                                              ),
                                       ),
                                       suffixIcon: Icon(
                                         Icons.visibility_outlined,
