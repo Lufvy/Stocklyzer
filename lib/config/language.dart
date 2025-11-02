@@ -39,6 +39,25 @@ class Language extends Translations {
       'logout': 'Logout',
       'logoutDialogTitle': 'Logout from Stocklyzer ?',
       'cancel': 'Cancel',
+      'home': 'Home',
+      'search': 'Search',
+      'warningTitle': 'WARNING!',
+      'warningMsg1': 'This application uses',
+      'warningAI': ' AI',
+      'warningMsg2':
+          ' to provide stock predictions. These predictions are not financial advice.',
+      'warningPoint1': 'The creators of this app',
+      'warningPointBoldPoint1': ' do not guarantee',
+      'warningPoint1.1':
+          ' accuracy and assume no responsibility for any decisions made based on the predictions.',
+      'warningPoint2':
+          'The AI model is prone to error and may produce inaccurate or outdated information.',
+      'warningPoint3':
+          'Always do your own research and consult with a qualified financial advisor before making investment decisions.',
+      'warningContinueText': 'By pressing',
+      'warningContinueBold': ' continue',
+      'warningContinueDesc': ', you acknowledge and accept these terms.',
+      'continueButton': 'CONTINUE',
     },
     'id': {
       'registerTitle': 'Ayo Mulai!',
@@ -76,6 +95,26 @@ class Language extends Translations {
       'logout': 'Keluar',
       'logoutDialogTitle': 'Keluar dari Stocklyzer ?',
       'cancel': 'Batal',
+      'home': 'Menu',
+      'search': 'Pencarian',
+      'warningTitle': 'PERINGATAN!',
+      'warningMsg1': 'Aplikasi ini menggunakan teknologi',
+      'warningAI': ' AI',
+      'warningMsg2':
+          ' untuk memberikan prediksi saham. Prediksi ini bukan merupakan saran keuangan.',
+      'warningPoint1': 'Pembuat aplikasi ini',
+      'warningPointBoldPoint1': ' tidak menjamin',
+      'warningPoint1.1':
+          ' keakuratan dan tidak bertanggung jawab atas keputusan yang diambil berdasarkan prediksi tersebut.',
+      'warningPoint2':
+          'Model AI dapat mengalami kesalahan dan mungkin menghasilkan informasi yang tidak akurat atau sudah tidak relevan.',
+      'warningPoint3':
+          'Selalu lakukan riset sendiri dan konsultasikan dengan penasihat keuangan yang terpercaya sebelum mengambil keputusan investasi.',
+      'warningContinueText': 'Dengan menekan',
+      'warningContinueBold': ' Lanjutkan',
+      'warningContinueDesc':
+          ', Anda menyatakan telah membaca, memahami, dan menyetujui ketentuan di atas',
+      'continueButton': 'LANJUTKAN',
     },
   };
 }

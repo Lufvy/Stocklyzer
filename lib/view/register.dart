@@ -1,14 +1,11 @@
-import 'package:animated_toggle_switch/animated_toggle_switch.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:stocklyzer/component/languageToggleButton.dart';
 import 'package:stocklyzer/component/logo.dart';
 import 'package:stocklyzer/config/appTheme.dart';
 import 'package:stocklyzer/config/extension.dart';
-import 'package:stocklyzer/config/language.dart';
 import 'package:stocklyzer/controller/themeController.dart';
 import 'package:stocklyzer/view/login.dart';
 
@@ -65,20 +62,18 @@ class Register extends StatelessWidget {
                             spacing: 10,
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    'register'.tr,
-                                    style: GoogleFonts.poppins(
-                                      fontSize: 20,
-                                      fontWeight: CustomFontWeight.semiBold,
+                              IntrinsicWidth(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      'register'.tr,
+                                      style: GoogleFonts.poppins(
+                                        fontSize: 20,
+                                        fontWeight: CustomFontWeight.medium,
+                                      ),
                                     ),
-                                  ),
-                                  SizedBox(height: 5),
-                                  FractionallySizedBox(
-                                    widthFactor: 0.3,
-                                    child: Container(
+                                    Container(
                                       height: 3,
                                       decoration: BoxDecoration(
                                         borderRadius: BorderRadius.circular(3),
@@ -87,8 +82,8 @@ class Register extends StatelessWidget {
                                         ).colorScheme.onPrimary,
                                       ),
                                     ),
-                                  ),
-                                ],
+                                  ],
+                                ),
                               ),
 
                               Column(
@@ -104,8 +99,12 @@ class Register extends StatelessWidget {
                                       hintText: 'nameHint'.tr,
                                       hintStyle: TextStyle(
                                         color: themeController.isDarkMode.value
-                                            ? Colors.white.withOpacity(0.59)
-                                            : Colors.black.withOpacity(0.59),
+                                            ? Colors.white.withValues(
+                                                alpha: 0.59,
+                                              )
+                                            : Colors.black.withValues(
+                                                alpha: 0.59,
+                                              ),
                                       ),
                                       border: OutlineInputBorder(),
                                       prefixIcon: Icon(Icons.person_outline),
@@ -130,8 +129,12 @@ class Register extends StatelessWidget {
                                       hintText: 'emailHint'.tr,
                                       hintStyle: TextStyle(
                                         color: themeController.isDarkMode.value
-                                            ? Colors.white.withOpacity(0.59)
-                                            : Colors.black.withOpacity(0.59),
+                                            ? Colors.white.withValues(
+                                                alpha: 0.59,
+                                              )
+                                            : Colors.black.withValues(
+                                                alpha: 0.59,
+                                              ),
                                       ),
                                       border: OutlineInputBorder(),
                                       prefixIcon: Icon(Icons.email_outlined),
@@ -157,8 +160,12 @@ class Register extends StatelessWidget {
                                       hintText: 'passwordHint'.tr,
                                       hintStyle: TextStyle(
                                         color: themeController.isDarkMode.value
-                                            ? Colors.white.withOpacity(0.59)
-                                            : Colors.black.withOpacity(0.59),
+                                            ? Colors.white.withValues(
+                                                alpha: 0.59,
+                                              )
+                                            : Colors.black.withValues(
+                                                alpha: 0.59,
+                                              ),
                                       ),
                                       suffixIcon: Icon(
                                         Icons.visibility_outlined,

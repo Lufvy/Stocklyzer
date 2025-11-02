@@ -2,7 +2,6 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:stocklyzer/config/extension.dart';
 import 'package:stocklyzer/controller/navBarController.dart';
@@ -18,7 +17,6 @@ class Navbar extends StatefulWidget {
 }
 
 class _NavbarState extends State<Navbar> {
-  @override
   final Navbarcontroller navController = Get.put(Navbarcontroller());
 
   final List<Widget> pages = [Home(), Search(), Profile()];
@@ -36,6 +34,7 @@ class _NavbarState extends State<Navbar> {
     super.dispose();
   }
 
+  @override
   Widget build(BuildContext context) {
     return Obx(() {
       return Scaffold(
@@ -51,27 +50,27 @@ class _NavbarState extends State<Navbar> {
               type: BottomNavigationBarType.fixed,
               currentIndex: navController.selectedIndex.value,
               onTap: navController.changeTab,
-              items: const [
+              items: [
                 BottomNavigationBarItem(
                   icon: Padding(
                     padding: const EdgeInsets.only(top: 5),
                     child: Icon(Icons.home, size: 40),
                   ),
-                  label: "Home",
+                  label: "home".tr,
                 ),
                 BottomNavigationBarItem(
                   icon: Padding(
                     padding: const EdgeInsets.only(top: 5),
                     child: Icon(Icons.search, size: 40),
                   ),
-                  label: "Search",
+                  label: "search".tr,
                 ),
                 BottomNavigationBarItem(
                   icon: Padding(
                     padding: const EdgeInsets.only(top: 5),
                     child: Icon(Icons.person, size: 40),
                   ),
-                  label: "Profile",
+                  label: "profile".tr,
                 ),
               ],
             ),
@@ -86,7 +85,7 @@ class _NavbarState extends State<Navbar> {
       Dialog(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
         child: Padding(
-          padding: const EdgeInsets.all(20),
+          padding: const EdgeInsets.all(15),
           child: Column(
             spacing: 20,
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -98,7 +97,7 @@ class _NavbarState extends State<Navbar> {
                   children: [
                     Image.asset('assets/warning.png', width: 100, height: 100),
                     Text(
-                      'WARNING!',
+                      'warningTitle'.tr,
                       style: GoogleFonts.poppins(
                         fontSize: 20,
                         fontWeight: CustomFontWeight.bold,
@@ -114,7 +113,7 @@ class _NavbarState extends State<Navbar> {
                 children: [
                   Text.rich(
                     TextSpan(
-                      text: 'This application uses',
+                      text: 'warningMsg1'.tr,
                       style: GoogleFonts.poppins(
                         fontSize: 10,
                         fontWeight: CustomFontWeight.regular,
@@ -122,17 +121,14 @@ class _NavbarState extends State<Navbar> {
                       ),
                       children: [
                         TextSpan(
-                          text: ' AI',
+                          text: 'warningAI'.tr,
                           style: GoogleFonts.poppins(
                             fontSize: 10,
                             fontWeight: CustomFontWeight.bold,
                             color: Colors.black,
                           ),
                         ),
-                        TextSpan(
-                          text:
-                              ' to provide stock predictions. These predictions are not financial advice.',
-                        ),
+                        TextSpan(text: 'warningMsg2'.tr),
                       ],
                     ),
                   ),
@@ -153,7 +149,7 @@ class _NavbarState extends State<Navbar> {
                           Expanded(
                             child: Text.rich(
                               TextSpan(
-                                text: 'The creators of this app',
+                                text: 'warningPoint1'.tr,
                                 style: GoogleFonts.poppins(
                                   fontSize: 10,
                                   fontWeight: CustomFontWeight.regular,
@@ -161,17 +157,14 @@ class _NavbarState extends State<Navbar> {
                                 ),
                                 children: [
                                   TextSpan(
-                                    text: ' do not guarantee',
+                                    text: 'warningPointBoldPoint1'.tr,
                                     style: GoogleFonts.poppins(
                                       fontSize: 10,
                                       fontWeight: CustomFontWeight.bold,
                                       color: Colors.black,
                                     ),
                                   ),
-                                  TextSpan(
-                                    text:
-                                        ' accuracy and assume no responsibility for any decisions made based on the predictions.',
-                                  ),
+                                  TextSpan(text: 'warningPoint1.1'.tr),
                                 ],
                               ),
                             ),
@@ -192,7 +185,7 @@ class _NavbarState extends State<Navbar> {
                           ),
                           Expanded(
                             child: Text(
-                              "The AI model is prone to error and may produce inaccurate or outdated information.",
+                              "warningPoint2".tr,
                               style: GoogleFonts.poppins(
                                 fontSize: 10,
                                 fontWeight: CustomFontWeight.regular,
@@ -216,7 +209,7 @@ class _NavbarState extends State<Navbar> {
                           ),
                           Expanded(
                             child: Text(
-                              "Always do your own research and consult with a qualified financial advisor before making investment decisions.",
+                              "warningPoint3".tr,
                               style: GoogleFonts.poppins(
                                 fontSize: 10,
                                 fontWeight: CustomFontWeight.regular,
@@ -234,7 +227,7 @@ class _NavbarState extends State<Navbar> {
               Center(
                 child: Text.rich(
                   TextSpan(
-                    text: 'By pressing',
+                    text: 'warningContinueText'.tr,
                     style: GoogleFonts.poppins(
                       fontSize: 11,
                       fontWeight: CustomFontWeight.regular,
@@ -242,16 +235,14 @@ class _NavbarState extends State<Navbar> {
                     ),
                     children: [
                       TextSpan(
-                        text: ' continue',
+                        text: 'warningContinueBold'.tr,
                         style: GoogleFonts.poppins(
                           fontSize: 11,
                           fontWeight: CustomFontWeight.bold,
                           color: Colors.black,
                         ),
                       ),
-                      TextSpan(
-                        text: ', you acknowledge and accept these terms.',
-                      ),
+                      TextSpan(text: 'warningContinueDesc'.tr),
                     ],
                   ),
                   textAlign: TextAlign.center,
@@ -272,7 +263,7 @@ class _NavbarState extends State<Navbar> {
                     ),
                   ),
                   child: Text(
-                    'CONTINUE',
+                    'continueButton'.tr,
                     style: GoogleFonts.poppins(
                       fontSize: 20,
                       fontWeight: CustomFontWeight.semiBold,

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:get/get.dart';
 import 'package:stocklyzer/config/appTheme.dart';
 import 'package:stocklyzer/config/language.dart';
@@ -33,20 +34,22 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return Obx(() {
-      return GetMaterialApp(
-        debugShowCheckedModeBanner: false,
-        title: 'Stocklyzer',
-        theme: Apptheme.lightTheme(context),
-        darkTheme: Apptheme.darkTheme(context),
-        themeMode: themeController.isDarkMode.value
-            ? ThemeMode.dark
-            : ThemeMode.light,
-        translations: Language(),
-        locale: themeController.isEnglish.value
-            ? const Locale('en')
-            : const Locale('id'),
-        fallbackLocale: const Locale('en'),
-        home: Onboarding(),
+      return KeyboardDismissOnTap(
+        child: GetMaterialApp(
+          debugShowCheckedModeBanner: false,
+          title: 'Stocklyzer',
+          theme: Apptheme.lightTheme(context),
+          darkTheme: Apptheme.darkTheme(context),
+          themeMode: themeController.isDarkMode.value
+              ? ThemeMode.dark
+              : ThemeMode.light,
+          translations: Language(),
+          locale: themeController.isEnglish.value
+              ? const Locale('en')
+              : const Locale('id'),
+          fallbackLocale: const Locale('en'),
+          home: Onboarding(),
+        ),
       );
     });
   }
