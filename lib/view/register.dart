@@ -232,7 +232,7 @@ class Register extends StatelessWidget {
                             ),
                             recognizer: TapGestureRecognizer()
                               ..onTap = () {
-                                Get.to(() => Login());
+                                Get.off(() => Login());
                               },
                           ),
                         ],

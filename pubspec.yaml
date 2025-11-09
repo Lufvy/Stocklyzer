@@ -45,8 +45,10 @@ dependencies:
   flutter_keyboard_visibility: ^6.0.0
   supabase_flutter: ^2.0.0
   flutter_dotenv: ^6.0.0
+  flutter_native_splash: ^2.4.7
 
 dev_dependencies:
+  flutter_launcher_icons: "^0.14.4"
   flutter_test:
     sdk: flutter
 
@@ -98,3 +100,13 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/to/font-from-package
+
+flutter_launcher_icons:
+  android: true
+  ios: true
+  image_path: "./assets/appIcon.png"
+# flutter_native_splash:
+#   color: "#007283" # background color
+#   android: true
+#   ios: true
+#   web: false

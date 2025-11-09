@@ -71,7 +71,7 @@ class Onboarding extends StatelessWidget {
             height: 45,
             child: ElevatedButton(
               onPressed: () {
-                Get.to(() => Login());
+                Get.off(() => Login());
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: Theme.of(context).primaryColor,
@@ -95,7 +95,7 @@ class Onboarding extends StatelessWidget {
             height: 45,
             child: ElevatedButton(
               onPressed: () {
-                Get.to(() => Register());
+                Get.off(() => Register());
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: themeController.isDarkMode.value

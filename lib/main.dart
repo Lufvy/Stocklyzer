@@ -7,6 +7,7 @@ import 'package:stocklyzer/controller/onboardingController.dart';
 import 'package:stocklyzer/controller/themeController.dart';
 import 'package:stocklyzer/view/onboarding.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:stocklyzer/view/splash.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 Future<void> main() async {
@@ -36,12 +37,20 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   final themeController = Get.find<Themecontroller>();
+  var isSplashVisible = true.obs;
 
   @override
   void initState() {
     super.initState();
     themeController.loadTheme();
     themeController.loadLanguage();
+
+    delaySplash();
+  }
+
+  Future<void> delaySplash() async {
+    await Future.delayed(const Duration(seconds: 2));
+    isSplashVisible.value = false;
   }
 
   @override
@@ -61,7 +70,13 @@ class _MyAppState extends State<MyApp> {
               ? const Locale('en')
               : const Locale('id'),
           fallbackLocale: const Locale('en'),
-          home: Onboarding(),
+          home: AnimatedSwitcher(
+            duration: const Duration(milliseconds: 600),
+            transitionBuilder: (Widget child, Animation<double> animation) {
+              return FadeTransition(opacity: animation, child: child);
+            },
+            child: isSplashVisible.value ? Splash() : Onboarding(),
+          ),
         ),
       );
     });

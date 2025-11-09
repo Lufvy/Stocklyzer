@@ -270,7 +270,7 @@ class Login extends StatelessWidget {
                             ),
                             recognizer: TapGestureRecognizer()
                               ..onTap = () {
-                                Get.to(() => Register());
+                                Get.off(() => Register());
                               },
                           ),
                         ],
