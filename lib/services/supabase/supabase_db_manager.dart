@@ -1,4 +1,4 @@
-import 'package:stocklyzer/services/supabase/SupabaseManager.dart';
+import 'package:stocklyzer/services/supabase/supabase_manager.dart';
 
 class DatabaseService {
   final _client = SupabaseManager().client;

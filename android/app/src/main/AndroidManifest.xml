@@ -23,6 +23,10 @@
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
+
+                <data
+                    android:scheme="com.example.stocklyzer"
+                    android:host="login-callback" />
             </intent-filter>
         </activity>
         <!-- Don't delete the meta-data below.
@@ -30,6 +34,10 @@
         <meta-data
             android:name="flutterEmbedding"
             android:value="2" />
+
+        <meta-data
+            android:name="com.google.android.gms.client_id"
+            android:value="108094242500-tcf6nde10r26dhgbdsohokkpq4jck3ef.apps.googleusercontent.com" />
     </application>
     <!-- Required to query activities that can process text, see:
          https://developer.android.com/training/package-visibility and

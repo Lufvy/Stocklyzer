@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:stocklyzer/component/languageToggleButton.dart';
+import 'package:stocklyzer/component/loading.dart';
 import 'package:stocklyzer/component/logo.dart';
 import 'package:stocklyzer/config/appTheme.dart';
 import 'package:stocklyzer/config/extension.dart';
+import 'package:stocklyzer/controller/profileController.dart';
 import 'package:stocklyzer/controller/themeController.dart';
 import 'package:stocklyzer/view/login.dart';
 
@@ -13,37 +15,43 @@ enum CTAButtonType { cancel, logout }
 class Profile extends StatelessWidget {
   Profile({super.key});
   final themeController = Get.find<Themecontroller>();
-
+  final profileController = Get.put(ProfileController());
   // bool isLanguageButtonToggled = false;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Obx(
-        () => Container(
-          width: double.infinity,
-          height: double.infinity,
-          decoration: BoxDecoration(
-            gradient: themeController.isDarkMode.value
-                ? Apptheme.darkGradient
-                : Apptheme.lightGradient,
-          ),
-          child: SafeArea(
-            child: Padding(
-              padding: const EdgeInsets.fromLTRB(34, 0, 34, 0),
-              child: Column(
-                spacing: 40,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  profileHeader(context),
-                  Column(
-                    spacing: 20,
-                    children: [languageButton(context), logoutButton()],
+        () => Stack(
+          children: [
+            Container(
+              width: double.infinity,
+              height: double.infinity,
+              decoration: BoxDecoration(
+                gradient: themeController.isDarkMode.value
+                    ? Apptheme.darkGradient
+                    : Apptheme.lightGradient,
+              ),
+              child: SafeArea(
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(34, 0, 34, 0),
+                  child: Column(
+                    spacing: 40,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      profileHeader(context),
+                      Column(
+                        spacing: 20,
+                        children: [languageButton(context), logoutButton()],
+                      ),
+                    ],
                   ),
-                ],
+                ),
               ),
             ),
-          ),
+
+            if (profileController.isLoading.value) OverlayLoading(),
+          ],
         ),
       ),
     );
@@ -183,7 +191,11 @@ class Profile extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   CTAButton("cancel".tr, CTAButtonType.cancel, onCancel),
-                  CTAButton("logout".tr, CTAButtonType.logout, onLogout),
+                  CTAButton(
+                    "logout".tr,
+                    CTAButtonType.logout,
+                    profileController.onUserLogout,
+                  ),
                 ],
               ),
             ],
@@ -195,10 +207,6 @@ class Profile extends StatelessWidget {
 
   void onCancel() {
     Get.back();
-  }
-
-  void onLogout() {
-    Get.offAll(() => Login());
   }
 
   Widget logoutButton() {

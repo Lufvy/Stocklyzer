@@ -5,6 +5,10 @@ import 'package:stocklyzer/config/appTheme.dart';
 import 'package:stocklyzer/config/language.dart';
 import 'package:stocklyzer/controller/onboardingController.dart';
 import 'package:stocklyzer/controller/themeController.dart';
+import 'package:stocklyzer/repository/user_repository.dart';
+import 'package:stocklyzer/services/supabase/supabase_auth_manager.dart';
+import 'package:stocklyzer/services/supabase/supabase_manager.dart';
+import 'package:stocklyzer/view/navBar.dart';
 import 'package:stocklyzer/view/onboarding.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:stocklyzer/view/splash.dart';
@@ -25,6 +29,9 @@ Future<void> main() async {
 
   Get.put(Themecontroller());
   Get.put(Onboardingcontroller());
+  Get.put(UserRepository(), permanent: true);
+
+  Get.put(AuthService());
   runApp(const MyApp());
 }
 
@@ -75,10 +82,23 @@ class _MyAppState extends State<MyApp> {
             transitionBuilder: (Widget child, Animation<double> animation) {
               return FadeTransition(opacity: animation, child: child);
             },
-            child: isSplashVisible.value ? Splash() : Onboarding(),
+            child: isSplashVisible.value ? Splash() : handleAfterSplash(),
           ),
         ),
       );
     });
+  }
+
+  Widget handleAfterSplash() {
+    final supabaseManager = SupabaseManager().client;
+    final session = supabaseManager.auth.currentSession;
+
+    if (session != null) {
+      // User is already logged in — restore session
+      return Navbar();
+    } else {
+      // User is not logged in — go to onboarding
+      return Onboarding();
+    }
   }
 }
