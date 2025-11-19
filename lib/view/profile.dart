@@ -138,7 +138,6 @@ class Profile extends StatelessWidget {
           ),
 
           // Button toggle bahasa
-          // TODO: Pake component yang ada di onboarding.dart aja, samain aja di design nya
           Languagetogglebutton(),
         ],
       ),

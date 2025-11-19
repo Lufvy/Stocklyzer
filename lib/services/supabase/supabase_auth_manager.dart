@@ -1,4 +1,8 @@
+import 'dart:async';
+import 'dart:io';
+
 import 'package:get/get.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:stocklyzer/component/snackBar.dart';
 import 'package:stocklyzer/repository/user_repository.dart';
 import 'package:stocklyzer/services/supabase/supabase_manager.dart';
@@ -60,18 +64,83 @@ class AuthService extends GetxController {
     }
   }
 
-  Future<AuthResponse> signInWithEmail(String email, String password) {
-    return _client.auth.signInWithPassword(email: email, password: password);
+  Future<AuthResponse> signInWithEmail(String email, String password) async {
+    try {
+      final res = await _client.auth.signInWithPassword(
+        email: email,
+        password: password,
+      );
+
+      return res; // success
+    } on AuthException catch (e) {
+      // This is where 400 "Invalid login credentials" lands
+      if (e.statusCode == 400 ||
+          e.message.contains("Invalid login credentials")) {
+        SnackbarHelper.show(
+          title: "Error",
+          message: "Invalid email or password.",
+          type: SnackType.error,
+        );
+      } else {
+        SnackbarHelper.show(
+          title: "Error",
+          message: e.message,
+          type: SnackType.error,
+        );
+      }
+      rethrow;
+    } catch (e) {
+      // Other unexpected errors (network, server, unknown)
+      SnackbarHelper.show(
+        title: "Error",
+        message: e.toString(),
+        type: SnackType.error,
+      );
+      rethrow;
+    }
   }
 
   Future<void> signOut() {
     return _client.auth.signOut();
   }
 
-  Future<void> signInWithGoogle() async {
-    await _client.auth.signInWithOAuth(
-      OAuthProvider.google,
-      redirectTo: 'com.example.stocklyzer://login-callback',
+  Future<AuthResponse> signInWithGoogle() async {
+    const webClientId =
+        '108094242500-fh641onb4l045sv44cq9hcm63rrf041b.apps.googleusercontent.com';
+    const iosClientId =
+        '108094242500-5bbfj7si3f0l7mkmkkpjms26fuv7d0vq.apps.googleusercontent.com';
+
+    // Google sign in on Android will work without providing the Android
+    // Client ID registered on Google Cloud.
+
+    final signIn = GoogleSignIn.instance;
+
+    // **Initialize** GoogleSignIn once
+    if (Platform.isAndroid) {
+      await signIn.initialize(serverClientId: webClientId);
+    } else if (Platform.isIOS) {
+      await signIn.initialize(
+        clientId: iosClientId,
+        serverClientId: webClientId,
+      );
+    }
+
+    // Try lightweight auth first (silent)
+    await signIn.attemptLightweightAuthentication();
+
+    // If not signed in, do the interactive flow
+    final account = await signIn.authenticate();
+
+    final idToken = account.authentication.idToken;
+
+    if (idToken == null) {
+      throw 'No tokens found from Google Sign-In';
+    }
+
+    // Pass nonce when signing in with Supabase
+    return _client.auth.signInWithIdToken(
+      provider: OAuthProvider.google,
+      idToken: idToken,
     );
   }
 
@@ -85,8 +154,6 @@ class AuthService extends GetxController {
       if (event == AuthChangeEvent.signedIn && session != null) {
         final user = session.user;
 
-        final provider = user.appMetadata['provider'];
-
         userRepository.getUserByEmail(user.email!).then((value) {
           if (value == null) {
             return;
@@ -94,13 +161,13 @@ class AuthService extends GetxController {
 
           if (value.isNewUser) {
             Get.offAll(() => Userpersonalization());
+            isLoggedIn.value = true;
             return;
           }
 
-          if (provider == 'email') {
-          } else {
-            Get.offAll(() => Navbar());
-          }
+          // Else if not new user
+          isLoggedIn.value = true;
+          Get.offAll(() => Navbar());
         });
       }
 

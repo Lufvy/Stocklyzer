@@ -43,9 +43,11 @@ dependencies:
   syncfusion_flutter_charts: ^31.1.19
   intl: ^0.20.2
   flutter_keyboard_visibility: ^6.0.0
-  supabase_flutter: ^2.0.0
+  supabase_flutter: ^2.10.3
   flutter_dotenv: ^6.0.0
   flutter_native_splash: ^2.4.7
+  google_sign_in: ^7.2.0
+  google_sign_in_ios: ^6.2.1
 
 dev_dependencies:
   flutter_launcher_icons: "^0.14.4"

@@ -1,5 +1,6 @@
 import 'package:get/get.dart';
 import 'package:stocklyzer/component/snackBar.dart';
+import 'package:stocklyzer/controller/validator.dart';
 import 'package:stocklyzer/services/supabase/supabase_auth_manager.dart';
 
 class RegisterController extends GetxController {
@@ -15,30 +16,33 @@ class RegisterController extends GetxController {
 
   void onUserRegister() async {
     isLoading.value = true;
-    if (!_validateName(name.value)) {
+    final nameValidation = Validator.validateName(name.value);
+    if (nameValidation != ValidatorResult.valid) {
       SnackbarHelper.show(
-        title: "Name Error",
-        message: "Invalid name. Please enter at least 4 characters.",
+        title: nameValidation.title,
+        message: nameValidation.message,
         type: SnackType.error,
       );
       isLoading.value = false;
       return;
     }
 
-    if (!_validateEmail(email.value)) {
+    final emailValidation = Validator.validateEmail(email.value);
+    if (emailValidation != ValidatorResult.valid) {
       SnackbarHelper.show(
-        title: "Email Error",
-        message: "Invalid email format. Please enter a valid email.",
+        title: emailValidation.title,
+        message: emailValidation.message,
         type: SnackType.error,
       );
       isLoading.value = false;
       return;
     }
 
-    if (!_validatePassword(password.value)) {
+    final passwordValidation = Validator.validatePassword(password.value);
+    if (passwordValidation != ValidatorResult.valid) {
       SnackbarHelper.show(
-        title: "Password Error",
-        message: "Password must be at least 6 characters long.",
+        title: passwordValidation.title,
+        message: passwordValidation.message,
         type: SnackType.error,
       );
       isLoading.value = false;
@@ -54,22 +58,5 @@ class RegisterController extends GetxController {
     } finally {
       isLoading.value = false;
     }
-  }
-
-  void onUserLogin() {}
-
-  void onUserLoginGoogle() {}
-
-  bool _validateEmail(String email) {
-    final emailRegex = RegExp(r'^[^@]+@[^@]+\.[^@]+');
-    return email.isNotEmpty && emailRegex.hasMatch(email);
-  }
-
-  bool _validatePassword(String password) {
-    return password.length >= 6;
-  }
-
-  bool _validateName(String name) {
-    return name.isNotEmpty && name.length >= 4;
   }
 }

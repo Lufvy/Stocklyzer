@@ -68,6 +68,12 @@
 					<string>com.googleusercontent.apps.108094242500-5bbfj7si3f0l7mkmkkpjms26fuv7d0vq</string>
 				</array>
 			</dict>
-</array>
+		</array>
+
+		<key>GIDClientID</key>
+		<string>108094242500-5bbfj7si3f0l7mkmkkpjms26fuv7d0vq.apps.googleusercontent.com</string>
+
+		<key>GIDServerClientID</key>
+		<string>108094242500-fh641onb4l045sv44cq9hcm63rrf041b.apps.googleusercontent.com</string>
 	</dict>
 </plist>
