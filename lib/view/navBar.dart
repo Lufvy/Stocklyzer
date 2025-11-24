@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:stocklyzer/config/extension.dart';
 import 'package:stocklyzer/controller/navBarController.dart';
+import 'package:stocklyzer/repository/stock_repository.dart';
 import 'package:stocklyzer/view/home.dart';
 import 'package:stocklyzer/view/profile.dart';
 import 'package:stocklyzer/view/search.dart';
@@ -24,6 +25,9 @@ class _NavbarState extends State<Navbar> {
   @override
   void initState() {
     super.initState();
+
+    Get.put(StockRepository(), permanent: true);
+
     WidgetsBinding.instance.addPostFrameCallback((_) {
       warningDialog();
     });

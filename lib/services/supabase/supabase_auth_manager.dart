@@ -145,36 +145,38 @@ class AuthService extends GetxController {
   }
 
   void _listenAuth() {
-    final client = _client; // access your Supabase client
+    final client = _client;
 
-    client.auth.onAuthStateChange.listen((data) {
+    client.auth.onAuthStateChange.listen((data) async {
       final event = data.event;
       final session = data.session;
 
       if (event == AuthChangeEvent.signedIn && session != null) {
         final user = session.user;
 
-        userRepository.getUserByEmail(user.email!).then((value) {
-          if (value == null) {
-            return;
-          }
+        final newlyLoggedUser = await userRepository.getUserByEmail(
+          user.email!,
+        );
 
-          if (value.isNewUser) {
-            Get.offAll(() => Userpersonalization());
-            isLoggedIn.value = true;
-            return;
-          }
+        if (newlyLoggedUser == null) {
+          return; // Should not happen, but safe check
+        }
 
-          // Else if not new user
+        if (newlyLoggedUser.isNewUser) {
           isLoggedIn.value = true;
-          Get.offAll(() => Navbar());
-        });
+          Get.offAll(() => Userpersonalization());
+          return;
+        }
+
+        // else → not a new user
+        isLoggedIn.value = true;
+        Get.offAll(() => Navbar());
       }
 
       if (event == AuthChangeEvent.signedOut) {
         print("User signed out");
         isLoggedIn.value = false;
-        Get.offAll(() => Onboarding()); // navigate back to login
+        Get.offAll(() => Onboarding());
       }
     });
   }

@@ -1,6 +1,5 @@
 import 'package:get/get.dart';
 import 'package:stocklyzer/services/supabase/supabase_auth_manager.dart';
-import 'package:stocklyzer/view/onboarding.dart';
 
 class ProfileController extends GetxController {
   final authService = Get.find<AuthService>();
@@ -9,7 +8,10 @@ class ProfileController extends GetxController {
 
   void onUserLogout() async {
     isLoading.value = true;
-    await authService.signOut();
-    isLoading.value = false;
+    try {
+      await authService.signOut();
+    } finally {
+      isLoading.value = false;
+    }
   }
 }

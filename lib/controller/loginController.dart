@@ -1,10 +1,7 @@
-import 'dart:io';
-
 import 'package:get/get.dart';
 import 'package:stocklyzer/component/snackBar.dart';
 import 'package:stocklyzer/controller/validator.dart';
 import 'package:stocklyzer/services/supabase/supabase_auth_manager.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
 
 class LoginController extends GetxController {
   var authService = Get.find<AuthService>();
