@@ -3,8 +3,13 @@ import 'package:intl/intl.dart';
 import 'package:stocklyzer/model/MsStock.dart';
 import 'package:stocklyzer/model/StockData.dart';
 import 'package:stocklyzer/model/StockPrediction.dart';
+import 'package:stocklyzer/services/supabase/supabase_auth_manager.dart';
 
 class Homecontroller extends GetxController {
+  final authService = Get.find<AuthService>();
+
+  var name = ''.obs;
+
   final stockData = <StockData>[].obs;
   final stockprediction = <Stockprediction>[].obs;
   final msStock = <MsStock>[].obs;
@@ -13,9 +18,20 @@ class Homecontroller extends GetxController {
   final selected_msStock = Rxn<MsStock>();
   final watchList = <MsStock>[].obs;
 
+  void populateProfileData() async {
+    final user = authService.currentlyLoggedUser;
+
+    if (user.value == null) {
+      return;
+    }
+
+    name.value = user.value!.name;
+  }
+
   @override
   void onInit() {
     super.onInit();
+    populateProfileData();
     // loadInitialData();
   }
 

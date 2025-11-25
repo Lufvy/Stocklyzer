@@ -6,7 +6,6 @@ import 'package:stocklyzer/config/appTheme.dart';
 import 'package:stocklyzer/config/extension.dart';
 import 'package:stocklyzer/controller/themeController.dart';
 import 'package:stocklyzer/controller/userPersonalizationController.dart';
-import 'package:stocklyzer/view/navBar.dart';
 
 class Userpersonalization extends StatelessWidget {
   Userpersonalization({super.key});
@@ -159,7 +158,6 @@ class Userpersonalization extends StatelessWidget {
         ),
         onPressed: () {
           userPersonalizationController.onFloatingButtonPressed();
-          // Get.offAll(() => Navbar());
         },
         child: Row(
           spacing: 5,

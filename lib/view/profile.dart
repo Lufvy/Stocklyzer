@@ -8,7 +8,6 @@ import 'package:stocklyzer/config/appTheme.dart';
 import 'package:stocklyzer/config/extension.dart';
 import 'package:stocklyzer/controller/profileController.dart';
 import 'package:stocklyzer/controller/themeController.dart';
-import 'package:stocklyzer/view/login.dart';
 
 enum CTAButtonType { cancel, logout }
 

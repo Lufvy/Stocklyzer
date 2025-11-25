@@ -5,7 +5,6 @@ import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:stocklyzer/component/languageToggleButton.dart';
 import 'package:stocklyzer/component/logo.dart';
 import 'package:stocklyzer/config/appTheme.dart';
-import 'package:stocklyzer/controller/registerController.dart';
 import 'package:stocklyzer/controller/onboardingController.dart';
 import 'package:stocklyzer/controller/themeController.dart';
 import 'package:stocklyzer/config/extension.dart';

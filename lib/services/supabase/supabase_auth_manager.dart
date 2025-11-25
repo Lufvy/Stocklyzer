@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:stocklyzer/component/snackBar.dart';
+import 'package:stocklyzer/model/MsUser.dart';
 import 'package:stocklyzer/repository/user_repository.dart';
 import 'package:stocklyzer/services/supabase/supabase_manager.dart';
 import 'package:stocklyzer/view/navBar.dart';
@@ -15,6 +16,8 @@ class AuthService extends GetxController {
   final _client = SupabaseManager().client;
   final userRepository = Get.find<UserRepository>();
   var isLoggedIn = false.obs;
+
+  var currentlyLoggedUser = Rx<MsUser?>(null);
 
   @override
   void onInit() {
@@ -144,6 +147,20 @@ class AuthService extends GetxController {
     );
   }
 
+  void checkSession() async {
+    final session = _client.auth.currentSession;
+    if (session != null) {
+      isLoggedIn.value = true;
+      final user = session.user;
+
+      final newlyLoggedUser = await userRepository.getUserByEmail(user.email!);
+
+      if (newlyLoggedUser != null) {
+        currentlyLoggedUser.value = newlyLoggedUser;
+      }
+    }
+  }
+
   void _listenAuth() {
     final client = _client;
 
@@ -161,6 +178,8 @@ class AuthService extends GetxController {
         if (newlyLoggedUser == null) {
           return; // Should not happen, but safe check
         }
+
+        currentlyLoggedUser.value = newlyLoggedUser;
 
         if (newlyLoggedUser.isNewUser) {
           isLoggedIn.value = true;

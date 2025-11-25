@@ -39,9 +39,8 @@ class UserRepository {
           .select(); // return updated rows
 
       // If response list is not empty → update success
-      return response != null && response.isNotEmpty;
+      return response.isNotEmpty;
     } catch (e) {
-      print('Error updating user: $e');
       return false; // failed
     }
   }
@@ -61,9 +60,8 @@ class UserRepository {
           .insert(insertData)
           .select();
 
-      return response != null && response.isNotEmpty;
+      return response.isNotEmpty;
     } catch (e) {
-      print('Error inserting watchlist: $e');
       return false;
     }
   }

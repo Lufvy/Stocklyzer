@@ -4,9 +4,9 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:stocklyzer/component/loading.dart';
 import 'package:stocklyzer/config/appTheme.dart';
 import 'package:stocklyzer/config/extension.dart';
-import 'package:stocklyzer/controller/homeController.dart';
 import 'package:stocklyzer/controller/searchController.dart';
 import 'package:stocklyzer/controller/themeController.dart';
+import 'package:stocklyzer/view/stockDetail.dart';
 
 class Search extends StatelessWidget {
   Search({super.key});
@@ -99,9 +99,10 @@ class Search extends StatelessWidget {
                                 return Padding(
                                   padding: const EdgeInsets.only(right: 10),
                                   child: GestureDetector(
-                                    onTap: () =>
-                                        searchController.selectedIndex.value =
-                                            index,
+                                    onTap: () {
+                                      searchController.selectedIndex.value =
+                                          index;
+                                    },
                                     child: AnimatedContainer(
                                       duration: const Duration(
                                         milliseconds: 200,
@@ -154,7 +155,9 @@ class Search extends StatelessWidget {
                             return Column(
                               children: [
                                 GestureDetector(
-                                  onTap: () {},
+                                  onTap: () {
+                                    Get.to(() => Stockdetail());
+                                  },
                                   child: Container(
                                     decoration: BoxDecoration(
                                       color: Theme.of(

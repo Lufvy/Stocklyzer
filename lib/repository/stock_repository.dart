@@ -20,7 +20,6 @@ class StockRepository {
       final cached = await redis.getValue<String>(allStockCacheKey);
 
       if (cached != null) {
-        print("✔ Cache hit → Returning Redis stocks");
         final decoded = jsonDecode(cached) as List;
         return decoded.map((e) => MsStock.fromJson(e)).toList();
       }
@@ -33,7 +32,6 @@ class StockRepository {
         ttl: cacheDuration,
       );
 
-      if (data == null) return [];
       return (data as List).map((e) => MsStock.fromJson(e)).toList();
     } catch (e) {
       throw Exception('Error fetching user: $e');

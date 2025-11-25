@@ -8,7 +8,6 @@ import 'package:stocklyzer/controller/themeController.dart';
 import 'package:stocklyzer/repository/stock_repository.dart';
 import 'package:stocklyzer/repository/user_repository.dart';
 import 'package:stocklyzer/services/supabase/supabase_auth_manager.dart';
-import 'package:stocklyzer/services/supabase/supabase_manager.dart';
 import 'package:stocklyzer/view/navBar.dart';
 import 'package:stocklyzer/view/onboarding.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -46,6 +45,8 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   final themeController = Get.find<Themecontroller>();
+  final authService = Get.find<AuthService>();
+
   var isSplashVisible = true.obs;
 
   @override
@@ -54,6 +55,7 @@ class _MyAppState extends State<MyApp> {
     themeController.loadTheme();
     themeController.loadLanguage();
 
+    authService.checkSession();
     delaySplash();
   }
 
@@ -92,10 +94,7 @@ class _MyAppState extends State<MyApp> {
   }
 
   Widget handleAfterSplash() {
-    final supabaseManager = SupabaseManager().client;
-    final session = supabaseManager.auth.currentSession;
-
-    if (session != null) {
+    if (authService.isLoggedIn.value) {
       // User is already logged in — restore session
       return Navbar();
     } else {

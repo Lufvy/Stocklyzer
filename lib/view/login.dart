@@ -10,7 +10,6 @@ import 'package:stocklyzer/controller/loginController.dart';
 import 'package:stocklyzer/controller/themeController.dart';
 import 'package:stocklyzer/config/extension.dart';
 import 'package:stocklyzer/view/register.dart';
-import 'package:stocklyzer/view/userPersonalization.dart';
 
 class Login extends StatelessWidget {
   Login({super.key});

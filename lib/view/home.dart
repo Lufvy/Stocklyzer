@@ -74,7 +74,7 @@ class Home extends StatelessWidget {
                         ),
                         children: [
                           TextSpan(
-                            text: 'William!',
+                            text: "${homeController.name.value}!",
                             style: GoogleFonts.poppins(
                               fontSize: 24,
                               fontWeight: FontWeight.bold,
