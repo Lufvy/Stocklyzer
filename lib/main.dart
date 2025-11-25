@@ -5,6 +5,7 @@ import 'package:stocklyzer/config/appTheme.dart';
 import 'package:stocklyzer/config/language.dart';
 import 'package:stocklyzer/controller/onboardingController.dart';
 import 'package:stocklyzer/controller/themeController.dart';
+import 'package:stocklyzer/repository/stock_repository.dart';
 import 'package:stocklyzer/repository/user_repository.dart';
 import 'package:stocklyzer/services/supabase/supabase_auth_manager.dart';
 import 'package:stocklyzer/services/supabase/supabase_manager.dart';
@@ -30,6 +31,7 @@ Future<void> main() async {
   Get.put(Themecontroller());
   Get.put(Onboardingcontroller());
   Get.put(UserRepository(), permanent: true);
+  Get.put(StockRepository(), permanent: true);
 
   Get.put(AuthService());
   runApp(const MyApp());

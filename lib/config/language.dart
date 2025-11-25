@@ -34,6 +34,7 @@ class Language extends Translations {
       'commodity': 'Commodity',
       'energy': 'Energy',
       'skipButton': 'Skip',
+      'nextButton': 'Next',
       'profile': 'Profile',
       'language': 'Language',
       'logout': 'Logout',
@@ -58,6 +59,9 @@ class Language extends Translations {
       'warningContinueBold': ' continue',
       'warningContinueDesc': ', you acknowledge and accept these terms.',
       'continueButton': 'CONTINUE',
+      'userPeronalizationErrorTitle': 'Error',
+      'userPeronalizationErrorMessage':
+          'Failed to set watchlist. Please try again.',
     },
     'id': {
       'registerTitle': 'Ayo Mulai!',
@@ -90,6 +94,7 @@ class Language extends Translations {
       'commodity': 'Komoditas',
       'energy': 'Energi',
       'skipButton': 'Lewati',
+      'nextButton': 'Lanjut',
       'profile': 'Profil',
       'language': 'Bahasa',
       'logout': 'Keluar',
@@ -115,6 +120,9 @@ class Language extends Translations {
       'warningContinueDesc':
           ', Anda menyatakan telah membaca, memahami, dan menyetujui ketentuan di atas',
       'continueButton': 'LANJUTKAN',
+      'userPeronalizationErrorTitle': 'Gagal',
+      'userPeronalizationErrorMessage':
+          'Gagal mengatur watchlist. Silakan coba lagi.',
     },
   };
 }

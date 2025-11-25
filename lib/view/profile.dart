@@ -16,7 +16,6 @@ class Profile extends StatelessWidget {
   Profile({super.key});
   final themeController = Get.find<Themecontroller>();
   final profileController = Get.put(ProfileController());
-  // bool isLanguageButtonToggled = false;
 
   @override
   Widget build(BuildContext context) {
@@ -90,14 +89,14 @@ class Profile extends StatelessWidget {
                 spacing: 5,
                 children: [
                   Text(
-                    "<Nama>",
+                    profileController.name.value,
                     style: GoogleFonts.poppins(
                       fontSize: 16,
                       fontWeight: CustomFontWeight.bold,
                     ),
                   ),
                   Text(
-                    "<Email>",
+                    profileController.email.value,
                     style: GoogleFonts.poppins(
                       fontSize: 10,
                       fontWeight: CustomFontWeight.medium,

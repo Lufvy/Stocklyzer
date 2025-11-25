@@ -1,3 +1,5 @@
+import 'package:stocklyzer/services/supabase/supabase_enum.dart';
+
 class MsUser {
   final String email;
   final String name;
@@ -14,24 +16,28 @@ class MsUser {
   });
 
   factory MsUser.fromJson(Map<String, dynamic> json) {
+    final tableUser = SupabaseTable.msUser;
+
     return MsUser(
-      email: json['email'] ?? '',
-      name: json['name'] ?? '',
-      isNewUser: json['isNewUser'] ?? false,
-      createdAt: DateTime.parse(json['created_at']),
-      lastSignInAt: json['last_sign_in_at'] != null
-          ? DateTime.parse(json['last_sign_in_at'])
+      email: json[tableUser.user.email] ?? '',
+      name: json[tableUser.user.name] ?? '',
+      isNewUser: json[tableUser.user.isNewUser] ?? false,
+      createdAt: DateTime.parse(json[tableUser.user.createdAt]),
+      lastSignInAt: json[tableUser.user.lastSignInAt] != null
+          ? DateTime.parse(json[tableUser.user.lastSignInAt])
           : null,
     );
   }
 
   Map<String, dynamic> toJson() {
+    final tableUser = SupabaseTable.msUser;
+
     return {
-      'email': email,
-      'name': name,
-      'isNewUser': isNewUser,
-      'created_at': createdAt.toIso8601String(),
-      'last_sign_in_at': lastSignInAt?.toIso8601String(),
+      tableUser.user.email: email,
+      tableUser.user.name: name,
+      tableUser.user.isNewUser: isNewUser,
+      tableUser.user.createdAt: createdAt.toIso8601String(),
+      tableUser.user.lastSignInAt: lastSignInAt?.toIso8601String(),
     };
   }
 }

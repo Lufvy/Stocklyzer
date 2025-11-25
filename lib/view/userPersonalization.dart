@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:stocklyzer/component/loading.dart';
 import 'package:stocklyzer/config/appTheme.dart';
 import 'package:stocklyzer/config/extension.dart';
 import 'package:stocklyzer/controller/themeController.dart';
@@ -89,9 +90,10 @@ class Userpersonalization extends StatelessWidget {
               mainAxisSpacing: 22,
               childAspectRatio: 0.74,
             ),
-            itemCount: userPersonalizationController.watchlist.length,
+            itemCount: userPersonalizationController.watchlist[title]!.length,
             itemBuilder: (context, index) {
-              final stock = userPersonalizationController.watchlist[index];
+              final stock =
+                  userPersonalizationController.watchlist[title]![index];
 
               return watchListTickerSelectionCard(context, stock);
             },
@@ -156,13 +158,16 @@ class Userpersonalization extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
         ),
         onPressed: () {
-          Get.offAll(() => Navbar());
+          userPersonalizationController.onFloatingButtonPressed();
+          // Get.offAll(() => Navbar());
         },
         child: Row(
           spacing: 5,
           children: [
             Text(
-              'skipButton'.tr,
+              userPersonalizationController.watchListSelectedCount <= 0
+                  ? 'skipButton'.tr
+                  : 'nextButton'.tr,
               style: GoogleFonts.poppins(
                 fontSize: 20,
                 fontWeight: CustomFontWeight.semiBold,
@@ -179,43 +184,52 @@ class Userpersonalization extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Obx(() {
-        return Container(
-          width: double.infinity,
-          height: double.infinity,
-          decoration: BoxDecoration(
-            gradient: themeController.isDarkMode.value
-                ? Apptheme.darkGradient
-                : Apptheme.lightGradient,
-          ),
-          child: SafeArea(
-            bottom: false,
-            child: Padding(
-              padding: const EdgeInsets.all(20),
-              child: Stack(
-                children: [
-                  SingleChildScrollView(
-                    padding: const EdgeInsets.only(bottom: 65),
-                    child: Column(
-                      spacing: 13,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        watchListTitleHeader(),
-                        Column(
-                          spacing: 20,
+        return Stack(
+          children: [
+            Container(
+              width: double.infinity,
+              height: double.infinity,
+              decoration: BoxDecoration(
+                gradient: themeController.isDarkMode.value
+                    ? Apptheme.darkGradient
+                    : Apptheme.lightGradient,
+              ),
+              child: SafeArea(
+                bottom: false,
+                child: Padding(
+                  padding: const EdgeInsets.all(20),
+                  child: Stack(
+                    children: [
+                      SingleChildScrollView(
+                        padding: const EdgeInsets.only(bottom: 65),
+                        child: Column(
+                          spacing: 13,
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            watchlistSection(context, 'bank'),
-                            watchlistSection(context, 'commodity'),
-                            watchlistSection(context, 'energy'),
+                            watchListTitleHeader(),
+                            Column(
+                              spacing: 20,
+                              children: [
+                                // From userPersonalizationController.watchlist keys, for loop each key to create section
+                                for (var title
+                                    in userPersonalizationController
+                                        .watchlist
+                                        .keys)
+                                  watchlistSection(context, title),
+                              ],
+                            ),
                           ],
                         ),
-                      ],
-                    ),
+                      ),
+                      floatingSkipButton(),
+                    ],
                   ),
-                  floatingSkipButton(),
-                ],
+                ),
               ),
             ),
-          ),
+
+            if (userPersonalizationController.isLoading.value) OverlayLoading(),
+          ],
         );
       }),
     );

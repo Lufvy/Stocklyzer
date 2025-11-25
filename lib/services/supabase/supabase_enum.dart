@@ -46,7 +46,6 @@ enum SupabaseTable {
 // ─────────────────────────────────────────────
 
 class MsUserColumns {
-  final columnName = "columnName";
   String get email => "email";
   String get name => "name";
   String get isNewUser => "isNewUser";
