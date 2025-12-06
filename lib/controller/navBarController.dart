@@ -11,6 +11,6 @@ class Navbarcontroller extends GetxController {
   void onInit() {
     super.onInit();
 
-    selectedIndex.value = 0;
+    changeTab(0);
   }
 }

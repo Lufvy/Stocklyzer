@@ -14,13 +14,13 @@ class SnackbarHelper {
     Color backgroundColor;
     switch (type) {
       case SnackType.success:
-        backgroundColor = Colors.green.withOpacity(0.7);
+        backgroundColor = Colors.green.withValues(alpha: 0.7);
         break;
       case SnackType.warning:
-        backgroundColor = Colors.orange.withOpacity(0.7);
+        backgroundColor = Colors.orange.withValues(alpha: 0.7);
         break;
       case SnackType.error:
-        backgroundColor = Colors.red.withOpacity(0.7);
+        backgroundColor = Colors.red.withValues(alpha: 0.7);
         break;
     }
 

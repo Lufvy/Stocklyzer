@@ -156,7 +156,11 @@ class Search extends StatelessWidget {
                               children: [
                                 GestureDetector(
                                   onTap: () {
-                                    Get.to(() => Stockdetail());
+                                    Get.to(
+                                      () => StockDetail(
+                                        selectedTicker: stock.ticker,
+                                      ),
+                                    );
                                   },
                                   child: Container(
                                     decoration: BoxDecoration(

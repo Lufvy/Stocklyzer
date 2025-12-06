@@ -1,22 +1,83 @@
+import 'dart:ffi';
+
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:stocklyzer/controller/navBarController.dart';
+import 'package:stocklyzer/dto/stockGraphDTO.dart';
+import 'package:stocklyzer/dto/watchListDTO.dart';
 import 'package:stocklyzer/model/MsStock.dart';
 import 'package:stocklyzer/model/StockData.dart';
 import 'package:stocklyzer/model/StockPrediction.dart';
+import 'package:stocklyzer/repository/stock_repository.dart';
 import 'package:stocklyzer/services/supabase/supabase_auth_manager.dart';
 
 class Homecontroller extends GetxController {
   final authService = Get.find<AuthService>();
+  final stockRepository = Get.find<StockRepository>();
+  final navBar = Get.find<Navbarcontroller>();
 
   var name = ''.obs;
+  final Rx<DateTime?> currentTrackedDate = Rx<DateTime?>(null);
 
+  var isWatchListLoading = false.obs;
+  var isIHSGGraphLoading = false.obs;
+
+  //TODO: OTW hapus
   final stockData = <StockData>[].obs;
-  final stockprediction = <Stockprediction>[].obs;
-  final msStock = <MsStock>[].obs;
-  // final selected_stockData = Rxn<StockData>();
-  // final selected_stockprediction = Rxn<Stockprediction>();
-  final selected_msStock = Rxn<MsStock>();
-  final watchList = <MsStock>[].obs;
+  final stockprediction = <StockPrediction>[].obs;
+  final selected_msStock = Rx<MsStock?>(null);
+
+  var IHSGGraphData = Rxn<StockGraphDTO>();
+  var IHSGHoverPoint = Rxn<StockGraphHoverPoint>();
+
+  var watchListData = <WatchListDTO>[].obs;
+
+  void populateIHSGGraph() async {
+    isIHSGGraphLoading.value = true;
+    final ihsgGraphData = await stockRepository.getStockGraph('^JKSE');
+
+    IHSGGraphData.value = ihsgGraphData;
+    isIHSGGraphLoading.value = false;
+
+    // Grab latest data point for hover point
+    if (ihsgGraphData.stockData.isNotEmpty) {
+      final latestData = ihsgGraphData.stockData.first;
+      final latestPrediction = ihsgGraphData.stockPrediction.isNotEmpty
+          ? ihsgGraphData.stockPrediction.first
+          : null;
+
+      updateIHSGHoverPoint(
+        latestData.date,
+        latestData.close,
+        latestPrediction?.closePrediction,
+      );
+    }
+  }
+
+  void updateIHSGHoverPoint(
+    DateTime date,
+    double closePrice,
+    double? predictedClosePrice,
+  ) {
+    IHSGHoverPoint.value = StockGraphHoverPoint(
+      date: date,
+      closePrice: closePrice,
+      predictedClosePrice: predictedClosePrice,
+    );
+  }
+
+  void populateWatchlist() async {
+    isWatchListLoading.value = true;
+    final email = authService.currentlyLoggedUser.value?.email;
+    if (email == null) {
+      return;
+    }
+
+    final fetchedWatchlist = await stockRepository.getUserWatchlist(email);
+
+    watchListData.value = fetchedWatchlist;
+    isWatchListLoading.value = false;
+  }
 
   void populateProfileData() async {
     final user = authService.currentlyLoggedUser;
@@ -32,6 +93,15 @@ class Homecontroller extends GetxController {
   void onInit() {
     super.onInit();
     populateProfileData();
+    populateWatchlist();
+    populateIHSGGraph();
+
+    ever(navBar.selectedIndex, (index) {
+      if (index == 0) {
+        // TODO: re-fetch watchlist data if its invalidated
+        print("test");
+      }
+    });
     // loadInitialData();
   }
 
@@ -370,12 +440,17 @@ class Homecontroller extends GetxController {
   bool sameDate(DateTime a, DateTime b) =>
       a.year == b.year && a.month == b.month && a.day == b.day;
 
-  String formatPrice(double value) {
+  static String formatPrice(double value) {
     final f = NumberFormat.currency(
       locale: 'en_US',
       symbol: '',
       decimalDigits: 2,
     );
     return f.format(value);
+  }
+
+  static int getPercentageDigit(double value) {
+    // Multiplies the decimal (e.g., 0.95) by 100 and truncates the result
+    return (value * 100).truncate();
   }
 }

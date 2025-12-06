@@ -14,7 +14,7 @@ import 'package:stocklyzer/view/register.dart';
 class Onboarding extends StatelessWidget {
   Onboarding({super.key});
   final themeController = Get.find<Themecontroller>();
-  final onboardingcontroller = Get.find<Onboardingcontroller>();
+  final onboardingcontroller = Get.put(Onboardingcontroller());
 
   @override
   Widget build(BuildContext context) {
@@ -71,7 +71,7 @@ class Onboarding extends StatelessWidget {
             height: 45,
             child: ElevatedButton(
               onPressed: () {
-                Get.off(() => Login());
+                Get.offAll(() => Login());
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: Theme.of(context).primaryColor,
@@ -95,7 +95,7 @@ class Onboarding extends StatelessWidget {
             height: 45,
             child: ElevatedButton(
               onPressed: () {
-                Get.off(() => Register());
+                Get.offAll(() => Register());
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: themeController.isDarkMode.value
@@ -235,36 +235,7 @@ class Onboarding extends StatelessWidget {
           ),
 
           SizedBox(width: 20),
-          // TODO: Language Toggle Button di refactor masukkin ke component
-          // Possibly di ubah design nya buat nanti, sekalian samain aja sama yang ada di profile.dart
           Languagetogglebutton(),
-          // Obx(
-          //   () => AnimatedToggleSwitch<bool>.size(
-          //     current: themeController.isEnglish.value,
-          //     values: const [false, true],
-          //     height: 30,
-          //     indicatorSize: const Size(45, 25),
-          //     iconOpacity: 1.0,
-          //     animationDuration: const Duration(milliseconds: 300),
-          //     style: ToggleStyle(
-          //       backgroundColor: Theme.of(context).colorScheme.background,
-          //       indicatorColor: Colors.transparent,
-          //       borderColor: Colors.transparent,
-          //       borderRadius: BorderRadius.circular(6),
-          //     ),
-
-          //     onChanged: themeController.toggleLanguage,
-          //     iconBuilder: (value) => ClipRRect(
-          //       borderRadius: BorderRadius.circular(6),
-          //       child: Image.asset(
-          //         value ? 'assets/EN.png' : 'assets/ID.png',
-          //         fit: BoxFit.cover,
-          //         width: 30,
-          //         height: 30,
-          //       ),
-          //     ),
-          //   ),
-          // ),
         ],
       ),
     );

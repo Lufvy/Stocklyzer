@@ -16,28 +16,28 @@ class MsUser {
   });
 
   factory MsUser.fromJson(Map<String, dynamic> json) {
-    final tableUser = SupabaseTable.msUser;
+    final tableUser = SupabaseTable.msUser.user;
 
     return MsUser(
-      email: json[tableUser.user.email] ?? '',
-      name: json[tableUser.user.name] ?? '',
-      isNewUser: json[tableUser.user.isNewUser] ?? false,
-      createdAt: DateTime.parse(json[tableUser.user.createdAt]),
-      lastSignInAt: json[tableUser.user.lastSignInAt] != null
-          ? DateTime.parse(json[tableUser.user.lastSignInAt])
+      email: json[tableUser.email] ?? '',
+      name: json[tableUser.name] ?? '',
+      isNewUser: json[tableUser.isNewUser] ?? false,
+      createdAt: DateTime.parse(json[tableUser.createdAt]),
+      lastSignInAt: json[tableUser.lastSignInAt] != null
+          ? DateTime.parse(json[tableUser.lastSignInAt])
           : null,
     );
   }
 
   Map<String, dynamic> toJson() {
-    final tableUser = SupabaseTable.msUser;
+    final tableUser = SupabaseTable.msUser.user;
 
     return {
-      tableUser.user.email: email,
-      tableUser.user.name: name,
-      tableUser.user.isNewUser: isNewUser,
-      tableUser.user.createdAt: createdAt.toIso8601String(),
-      tableUser.user.lastSignInAt: lastSignInAt?.toIso8601String(),
+      tableUser.email: email,
+      tableUser.name: name,
+      tableUser.isNewUser: isNewUser,
+      tableUser.createdAt: createdAt.toIso8601String(),
+      tableUser.lastSignInAt: lastSignInAt?.toIso8601String(),
     };
   }
 }

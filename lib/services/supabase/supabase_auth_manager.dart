@@ -1,9 +1,13 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:stocklyzer/component/snackBar.dart';
+import 'package:stocklyzer/controller/homeController.dart';
+import 'package:stocklyzer/controller/navBarController.dart';
+import 'package:stocklyzer/controller/profileController.dart';
 import 'package:stocklyzer/model/MsUser.dart';
 import 'package:stocklyzer/repository/user_repository.dart';
 import 'package:stocklyzer/services/supabase/supabase_manager.dart';
@@ -103,8 +107,25 @@ class AuthService extends GetxController {
     }
   }
 
-  Future<void> signOut() {
-    return _client.auth.signOut();
+  Future<void> signOut() async {
+    // Reset your app state
+    isLoggedIn.value = false;
+    currentlyLoggedUser.value = null;
+
+    // Sign out from Supabase
+    await _client.auth.signOut();
+
+    // Always try to clear GoogleSignIn cache
+    final signIn = GoogleSignIn.instance;
+
+    try {
+      await signIn.signOut(); // logs out current account
+    } catch (_) {}
+
+    try {
+      await signIn
+          .disconnect(); // removes cached account, forces account selection next time
+    } catch (_) {}
   }
 
   Future<AuthResponse> signInWithGoogle() async {
@@ -169,32 +190,48 @@ class AuthService extends GetxController {
       final session = data.session;
 
       if (event == AuthChangeEvent.signedIn && session != null) {
-        final user = session.user;
+        print("User signed in: ${session.user.email}");
 
+        // Fetch user safely
         final newlyLoggedUser = await userRepository.getUserByEmail(
-          user.email!,
+          session.user.email!,
         );
 
-        if (newlyLoggedUser == null) {
-          return; // Should not happen, but safe check
-        }
+        if (newlyLoggedUser == null) return;
 
         currentlyLoggedUser.value = newlyLoggedUser;
+        isLoggedIn.value = true;
+
+        // Use a small delay to ensure UI is ready for navigation
+        await Future.delayed(Duration(milliseconds: 100));
 
         if (newlyLoggedUser.isNewUser) {
-          isLoggedIn.value = true;
           Get.offAll(() => Userpersonalization());
-          return;
+        } else {
+          Get.offAll(() => Navbar());
         }
-
-        // else → not a new user
-        isLoggedIn.value = true;
-        Get.offAll(() => Navbar());
       }
 
       if (event == AuthChangeEvent.signedOut) {
         print("User signed out");
         isLoggedIn.value = false;
+
+        if (Get.isRegistered<ProfileController>()) {
+          Get.delete<ProfileController>();
+        }
+
+        if (Get.isRegistered<Homecontroller>()) {
+          Get.delete<Homecontroller>();
+        }
+
+        if (Get.isRegistered<SearchController>()) {
+          Get.delete<SearchController>();
+        }
+
+        if (Get.isRegistered<Navbarcontroller>()) {
+          Get.delete<Navbarcontroller>();
+        }
+
         Get.offAll(() => Onboarding());
       }
     });

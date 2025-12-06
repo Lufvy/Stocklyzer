@@ -29,36 +29,36 @@ class MsStock {
   );
 
   factory MsStock.fromJson(Map<String, dynamic> json) {
-    final tableStock = SupabaseTable.msStock;
+    final tableStock = SupabaseTable.msStock.stock;
 
     return MsStock(
-      json[tableStock.stock.ticker] ?? '',
-      json[tableStock.stock.name] ?? '',
-      json[tableStock.stock.sectorEN] ?? '',
-      json[tableStock.stock.subsectorEN] ?? '',
-      json[tableStock.stock.descriptionEN] ?? '',
-      json[tableStock.stock.sectorID],
-      json[tableStock.stock.subsectorID],
-      json[tableStock.stock.descriptionID],
-      (json[tableStock.stock.accuracy] ?? 0).toDouble(),
-      (json[tableStock.stock.nInference] ?? 0).toDouble(),
+      json[tableStock.ticker] ?? '',
+      json[tableStock.name] ?? '',
+      json[tableStock.sectorEN] ?? '',
+      json[tableStock.subsectorEN] ?? '',
+      json[tableStock.descriptionEN] ?? '',
+      json[tableStock.sectorID],
+      json[tableStock.subsectorID],
+      json[tableStock.descriptionID],
+      (json[tableStock.accuracy] ?? 0).toDouble(),
+      (json[tableStock.nInference] ?? 0).toDouble(),
     );
   }
 
   Map<String, dynamic> toJson() {
-    final tableStock = SupabaseTable.msStock;
+    final tableStock = SupabaseTable.msStock.stock;
 
     return {
-      tableStock.stock.ticker: ticker,
-      tableStock.stock.name: name,
-      tableStock.stock.sectorEN: sector,
-      tableStock.stock.subsectorEN: subsector,
-      tableStock.stock.descriptionEN: description,
-      tableStock.stock.sectorID: sectorID,
-      tableStock.stock.subsectorID: subsectorID,
-      tableStock.stock.descriptionID: descriptionID,
-      tableStock.stock.accuracy: accuracy,
-      tableStock.stock.nInference: nInference,
+      tableStock.ticker: ticker,
+      tableStock.name: name,
+      tableStock.sectorEN: sector,
+      tableStock.subsectorEN: subsector,
+      tableStock.descriptionEN: description,
+      tableStock.sectorID: sectorID,
+      tableStock.subsectorID: subsectorID,
+      tableStock.descriptionID: descriptionID,
+      tableStock.accuracy: accuracy,
+      tableStock.nInference: nInference,
     };
   }
 }

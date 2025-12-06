@@ -1,7 +1,11 @@
+import 'dart:ffi';
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
+import 'package:stocklyzer/component/loading.dart';
 import 'package:stocklyzer/component/logo.dart';
 import 'package:stocklyzer/config/appTheme.dart';
 import 'package:stocklyzer/config/extension.dart';
@@ -83,7 +87,25 @@ class Home extends StatelessWidget {
                         ],
                       ),
                     ),
-                    mainChart(context),
+                    if (homeController.isIHSGGraphLoading.value)
+                      Container(
+                        width: double
+                            .infinity, // Set the desired width in logical pixels
+                        height: 335, // Set the desired height in logical pixels
+                        decoration: BoxDecoration(
+                          color: Theme.of(context)
+                              .colorScheme
+                              .secondaryContainer, // Set the background color
+                          borderRadius: BorderRadius.circular(
+                            8.0,
+                          ), // Set the corner radius
+                        ),
+                        child: Center(
+                          child: OverlayLoading(isBackground: false, size: 200),
+                        ),
+                      )
+                    else
+                      mainChart(context),
                     watchList(context),
                   ],
                 ),
@@ -96,15 +118,43 @@ class Home extends StatelessWidget {
   }
 
   Widget mainChart(BuildContext context) {
-    final actualData = homeController.stockData
-        .where((s) => s.ticker == 'IHSG')
-        .where((s) => s.date.isBefore(DateTime(2024, 10, 6)))
+    final currentDate = DateTime.now();
+    final actualData = homeController.IHSGGraphData.value?.stockData
+        .where((s) => s.date.isBefore(currentDate))
         .toList();
 
-    final predictedData = homeController.stockprediction
-        .where((s) => s.ticker == 'IHSG')
-        .where((s) => s.date.isAfter(DateTime(2024, 10, 5)))
+    final predictedData = homeController.IHSGGraphData.value?.stockPrediction
+        // .where((s) => s.date.isAfter(currentDate))
         .toList();
+
+    final double yAxisMin;
+    final double yAxisMax;
+
+    final List<double> allPrices = [
+      ...actualData?.map((s) => s.close) ?? [],
+      ...predictedData?.map((s) => s.closePrediction) ?? [],
+    ];
+
+    if (allPrices.isEmpty) {
+      // Safety fallback when data is loading or missing
+      yAxisMin = 0.0;
+      yAxisMax = 1.0;
+    } else {
+      final double calculatedMin = allPrices
+          .map((e) => e.toDouble())
+          .reduce(min);
+      final double calculatedMax = allPrices
+          .map((e) => e.toDouble())
+          .reduce(max);
+
+      // Set buffer: use 1% of the range or a minimum of 100, whichever is larger.
+      const double minimumBuffer = 100.0;
+      final double dynamicBuffer = (calculatedMax - calculatedMin) * 0.01;
+      final double buffer = max(minimumBuffer, dynamicBuffer);
+
+      yAxisMin = calculatedMin - buffer;
+      yAxisMax = calculatedMax + buffer;
+    }
 
     return Container(
       decoration: BoxDecoration(
@@ -161,7 +211,7 @@ class Home extends StatelessWidget {
                       ),
                     ),
                     Text(
-                      '98%',
+                      '${Homecontroller.getPercentageDigit(homeController.IHSGGraphData.value?.totalAccuracy ?? 0.0)}%',
                       style: GoogleFonts.poppins(
                         fontSize: 20,
                         fontWeight: CustomFontWeight.semiBold,
@@ -173,7 +223,9 @@ class Home extends StatelessWidget {
               ],
             ),
             Text(
-              '05/10/2024',
+              DateFormat(
+                'dd/MM/yyyy',
+              ).format(homeController.IHSGHoverPoint.value!.date),
               style: GoogleFonts.poppins(
                 fontSize: 15,
                 fontWeight: CustomFontWeight.medium,
@@ -198,7 +250,9 @@ class Home extends StatelessWidget {
                       ),
                     ),
                     Text(
-                      '7.113,42',
+                      Homecontroller.formatPrice(
+                        homeController.IHSGHoverPoint.value!.closePrice,
+                      ),
                       style: GoogleFonts.poppins(
                         fontSize: 20,
                         fontWeight: CustomFontWeight.bold,
@@ -221,7 +275,19 @@ class Home extends StatelessWidget {
                       ),
                     ),
                     Text(
-                      '7.123,42',
+                      homeController
+                                  .IHSGHoverPoint
+                                  .value!
+                                  .predictedClosePrice !=
+                              null
+                          ? Homecontroller.formatPrice(
+                              homeController
+                                      .IHSGHoverPoint
+                                      .value!
+                                      .predictedClosePrice ??
+                                  0,
+                            )
+                          : "-",
                       style: GoogleFonts.poppins(
                         fontSize: 20,
                         fontWeight: CustomFontWeight.bold,
@@ -245,7 +311,9 @@ class Home extends StatelessWidget {
                       ),
                     ),
                     Text(
-                      '98%',
+                      homeController.IHSGHoverPoint.value!.accuracy != null
+                          ? '${Homecontroller.getPercentageDigit(homeController.IHSGHoverPoint.value!.accuracy!)}%'
+                          : "-",
                       style: GoogleFonts.poppins(
                         fontSize: 20,
                         fontWeight: CustomFontWeight.bold,
@@ -272,15 +340,20 @@ class Home extends StatelessWidget {
                   tooltipSettings: const InteractiveTooltip(enable: false),
                   builder: (context, dynamic details) {
                     final points = details?.groupingModeInfo?.points ?? [];
-                    if (points.isEmpty) return const SizedBox.shrink();
+                    if (points.isEmpty) {
+                      homeController.currentTrackedDate.value = currentDate;
+                      return const SizedBox.shrink();
+                    }
 
                     final date = points.first.x as DateTime;
+
+                    homeController.currentTrackedDate.value = date;
                     final dateText = DateFormat('MMM dd, yyyy').format(date);
 
-                    final actual = actualData.firstWhereOrNull(
+                    final actual = actualData?.firstWhereOrNull(
                       (s) => homeController.sameDate(s.date, date),
                     );
-                    final predicted = predictedData.firstWhereOrNull(
+                    final predicted = predictedData?.firstWhereOrNull(
                       (s) => homeController.sameDate(s.date, date),
                     );
 
@@ -312,7 +385,7 @@ class Home extends StatelessWidget {
                           ),
                           if (actual != null)
                             Text(
-                              'Actual: Rp ${homeController.formatPrice(actual.close)}',
+                              'Actual: Rp ${Homecontroller.formatPrice(actual.close)}',
                               style: const TextStyle(
                                 color: Colors.greenAccent,
                                 fontSize: 12,
@@ -320,7 +393,7 @@ class Home extends StatelessWidget {
                             ),
                           if (predicted != null)
                             Text(
-                              'Predicted: Rp ${homeController.formatPrice(predicted.closePrediction)}',
+                              'Predicted: Rp ${Homecontroller.formatPrice(predicted.closePrediction)}',
                               style: const TextStyle(
                                 color: Colors.orangeAccent,
                                 fontSize: 12,
@@ -340,6 +413,8 @@ class Home extends StatelessWidget {
                 ),
 
                 primaryYAxis: NumericAxis(
+                  minimum: yAxisMin,
+                  maximum: yAxisMax,
                   axisLine: const AxisLine(width: 0),
                   majorTickLines: const MajorTickLines(size: 0),
                   majorGridLines: const MajorGridLines(color: Colors.black),
@@ -358,11 +433,11 @@ class Home extends StatelessWidget {
                   ),
 
                   // ===== Predicted =====
-                  LineSeries<Stockprediction, DateTime>(
+                  LineSeries<StockPrediction, DateTime>(
                     name: 'Predicted',
                     dataSource: predictedData,
-                    xValueMapper: (Stockprediction stock, _) => stock.date,
-                    yValueMapper: (Stockprediction stock, _) =>
+                    xValueMapper: (StockPrediction stock, _) => stock.date,
+                    yValueMapper: (StockPrediction stock, _) =>
                         stock.closePrediction,
                     color: Colors.orangeAccent,
                     dashArray: const [5, 3],
@@ -449,131 +524,141 @@ class Home extends StatelessWidget {
               ],
             ),
 
-            ListView.builder(
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              itemCount: homeController.watchList.length,
-              itemBuilder: (context, index) {
-                final stock = homeController.watchList[index];
-                final stockData = homeController.stockData.firstWhereOrNull(
-                  (s) =>
-                      s.ticker == stock.ticker &&
-                      s.date == DateTime(2024, 10, 5),
-                );
+            if (homeController.isWatchListLoading.value)
+              OverlayLoading(isBackground: false, size: 40)
+            else if (homeController.watchListData.isEmpty)
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 20),
+                child: Center(
+                  child: Text(
+                    'No stocks in your watchlist.',
+                    style: GoogleFonts.poppins(
+                      fontSize: 14,
+                      fontWeight: CustomFontWeight.medium,
+                      color: themeController.isDarkMode.value
+                          ? Colors.white.withValues(alpha: 0.8)
+                          : Colors.black.withValues(alpha: 0.8),
+                    ),
+                  ),
+                ),
+              )
+            else
+              ListView.builder(
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                itemCount: homeController.watchListData.length,
+                itemBuilder: (context, index) {
+                  final stockWatchlist = homeController.watchListData[index];
 
-                if (stockData == null) return SizedBox();
-
-                final nextDate = stockData.date.add(const Duration(days: 1));
-
-                final prediction = homeController.stockprediction
-                    .firstWhereOrNull(
-                      (p) => p.ticker == stock.ticker && p.date == nextDate,
-                    );
-                return Column(
-                  children: [
-                    GestureDetector(
-                      onTap: () {
-                        homeController.selected_msStock.value = stock;
-                        // homeController.selected_stockprediction.value =
-                        // prediction;
-                        // homeController.selected_stockData.value = stockData;
-                        Get.to(() => Stockdetail());
-                      },
-                      child: Container(
-                        decoration: BoxDecoration(
-                          color: Theme.of(
-                            context,
-                          ).colorScheme.secondaryContainer,
-                          borderRadius: BorderRadius.circular(8),
-                          border: themeController.isDarkMode.value
-                              ? null
-                              : Border.all(
-                                  width: 2,
-                                  color: Theme.of(
-                                    context,
-                                  ).colorScheme.onSecondaryContainer,
-                                ),
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.all(8),
-                          child: Row(
-                            children: [
-                              Image.asset(
-                                'assets/tickers/${stock.ticker}.png',
-                                width: 32,
-                                height: 32,
-                              ),
-                              SizedBox(width: 10),
-                              Expanded(
-                                flex: 4,
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      stock.ticker,
-                                      style: GoogleFonts.poppins(
-                                        fontSize: 13,
-                                        fontWeight: CustomFontWeight.bold,
-                                      ),
-                                      textAlign: TextAlign.center,
-                                    ),
-                                    Text(
-                                      stock.name,
-                                      style: GoogleFonts.poppins(
-                                        fontSize: 10,
-                                        fontWeight: CustomFontWeight.regular,
-                                        color: themeController.isDarkMode.value
-                                            ? Color(
-                                                0XFFFFFFFF,
-                                              ).withValues(alpha: 0.8)
-                                            : Color(
-                                                0XFF000000,
-                                              ).withValues(alpha: 0.8),
-                                      ),
-                                      textAlign: TextAlign.center,
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              Expanded(
-                                flex: 3,
-                                child: Text(
-                                  homeController
-                                      .formatPrice(stockData.close)
-                                      .toString(),
-                                  style: GoogleFonts.poppins(
-                                    fontSize: 13,
-                                    fontWeight: CustomFontWeight.bold,
+                  return Column(
+                    children: [
+                      GestureDetector(
+                        onTap: () {
+                          Get.to(
+                            () => StockDetail(
+                              selectedTicker: stockWatchlist.ticker,
+                            ),
+                          );
+                        },
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: Theme.of(
+                              context,
+                            ).colorScheme.secondaryContainer,
+                            borderRadius: BorderRadius.circular(8),
+                            border: themeController.isDarkMode.value
+                                ? null
+                                : Border.all(
+                                    width: 2,
+                                    color: Theme.of(
+                                      context,
+                                    ).colorScheme.onSecondaryContainer,
                                   ),
-                                  textAlign: TextAlign.center,
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.all(8),
+                            child: Row(
+                              children: [
+                                Image.asset(
+                                  'assets/tickers/${stockWatchlist.ticker}.png',
+                                  width: 32,
+                                  height: 32,
                                 ),
-                              ),
-                              Expanded(
-                                flex: 3,
-                                child: Text(
-                                  homeController
-                                      .formatPrice(
-                                        prediction!.closePrediction,
-                                      ) // for demo
-                                      .toString(),
-                                  style: GoogleFonts.poppins(
-                                    fontSize: 13,
-                                    fontWeight: CustomFontWeight.bold,
-                                    color: Color(0XFFFFB700),
+                                SizedBox(width: 10),
+                                Expanded(
+                                  flex: 4,
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        stockWatchlist.ticker,
+                                        style: GoogleFonts.poppins(
+                                          fontSize: 13,
+                                          fontWeight: CustomFontWeight.bold,
+                                        ),
+                                        textAlign: TextAlign.center,
+                                      ),
+                                      Text(
+                                        stockWatchlist.name,
+                                        style: GoogleFonts.poppins(
+                                          fontSize: 10,
+                                          fontWeight: CustomFontWeight.regular,
+                                          color:
+                                              themeController.isDarkMode.value
+                                              ? Color(
+                                                  0XFFFFFFFF,
+                                                ).withValues(alpha: 0.8)
+                                              : Color(
+                                                  0XFF000000,
+                                                ).withValues(alpha: 0.8),
+                                        ),
+                                        textAlign: TextAlign.left,
+                                        maxLines: 1, // Limit to one line
+                                        overflow: TextOverflow
+                                            .ellipsis, // Truncate with "..."
+                                      ),
+                                    ],
                                   ),
-                                  textAlign: TextAlign.center,
                                 ),
-                              ),
-                            ],
+                                Expanded(
+                                  flex: 3,
+                                  child: Text(
+                                    Homecontroller.formatPrice(
+                                      stockWatchlist.lastPrice,
+                                    ).toString(),
+                                    style: GoogleFonts.poppins(
+                                      fontSize: 13,
+                                      fontWeight: CustomFontWeight.bold,
+                                    ),
+                                    textAlign: TextAlign.center,
+                                  ),
+                                ),
+                                Expanded(
+                                  flex: 3,
+                                  child: Text(
+                                    Homecontroller.formatPrice(
+                                          stockWatchlist.predictedPrice,
+                                        ) // for demo
+                                        .toString(),
+                                    style: GoogleFonts.poppins(
+                                      fontSize: 13,
+                                      fontWeight: CustomFontWeight.bold,
+                                      color: Color(0XFFFFB700),
+                                    ),
+                                    textAlign: TextAlign.center,
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                    SizedBox(height: 14),
-                  ],
-                );
-              },
-            ),
+                      SizedBox(height: 14),
+                    ],
+                  );
+                },
+              ),
           ],
         ),
       ],

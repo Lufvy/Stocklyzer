@@ -3,7 +3,6 @@ import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:get/get.dart';
 import 'package:stocklyzer/config/appTheme.dart';
 import 'package:stocklyzer/config/language.dart';
-import 'package:stocklyzer/controller/onboardingController.dart';
 import 'package:stocklyzer/controller/themeController.dart';
 import 'package:stocklyzer/repository/stock_repository.dart';
 import 'package:stocklyzer/repository/user_repository.dart';
@@ -28,11 +27,10 @@ Future<void> main() async {
   await Supabase.initialize(url: supabaseUrl, anonKey: supabaseAnonKey);
 
   Get.put(Themecontroller());
-  Get.put(Onboardingcontroller());
   Get.put(UserRepository(), permanent: true);
   Get.put(StockRepository(), permanent: true);
 
-  Get.put(AuthService());
+  Get.put(AuthService(), permanent: true);
   runApp(const MyApp());
 }
 
