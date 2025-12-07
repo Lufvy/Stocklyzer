@@ -84,36 +84,37 @@ class StockChart extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           spacing: 13,
           children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                IntrinsicWidth(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        dataGraph.ticker == '^JKSE'
-                            ? 'IHSG'
-                            : dataGraph.ticker.substring(
-                                0,
-                                dataGraph.ticker.length - 3,
-                              ),
-                        style: GoogleFonts.poppins(
-                          fontSize: 20,
-                          fontWeight: CustomFontWeight.medium,
+            if (dataGraph.ticker == '^JKSE')
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  IntrinsicWidth(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          dataGraph.ticker == '^JKSE'
+                              ? 'IHSG'
+                              : dataGraph.ticker.substring(
+                                  0,
+                                  dataGraph.ticker.length - 3,
+                                ),
+                          style: GoogleFonts.poppins(
+                            fontSize: 20,
+                            fontWeight: CustomFontWeight.medium,
+                          ),
                         ),
-                      ),
-                      Container(
-                        height: 3,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(3),
-                          color: Theme.of(context).colorScheme.onPrimary,
+                        Container(
+                          height: 3,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(3),
+                            color: Theme.of(context).colorScheme.onPrimary,
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
-                ),
-                if (dataGraph.ticker == '^JKSE')
+
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
@@ -137,8 +138,8 @@ class StockChart extends StatelessWidget {
                       ),
                     ],
                   ),
-              ],
-            ),
+                ],
+              ),
             Text(
               DateFormat('dd/MM/yyyy').format(hoverPoint.date),
               style: GoogleFonts.poppins(

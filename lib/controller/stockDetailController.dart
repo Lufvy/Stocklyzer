@@ -1,6 +1,7 @@
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:stocklyzer/dto/stockGraphDTO.dart';
+import 'package:stocklyzer/dto/stockHistoryDetailDTO.dart';
 import 'package:stocklyzer/model/MsStock.dart';
 import 'package:stocklyzer/repository/stock_repository.dart';
 
@@ -13,6 +14,7 @@ class StockDetailController extends GetxController {
   final Rxn<MsStock> selectedStock = Rxn();
   var selectedStockGraphData = Rxn<StockGraphDTO>();
   var selectedStockHoverPoint = Rxn<StockGraphHoverPoint>();
+  var stockHistoryDetails = <StockHistoryDetailDTO>[].obs;
 
   String get stockTicker {
     final ticker = selectedStock.value?.ticker ?? '';
@@ -25,7 +27,7 @@ class StockDetailController extends GetxController {
       final queryTicker = "$ticker.JK";
       fetchMsStockDetail(queryTicker);
       populateSelectedStockGraph(queryTicker);
-      // TODO: fetch 20 latest record for this ticker
+      fetchStockHistoryDetail(queryTicker);
     } finally {
       isLoading.value = false;
     }
@@ -75,6 +77,21 @@ class StockDetailController extends GetxController {
       closePrice: closePrice,
       predictedClosePrice: predictedClosePrice,
     );
+  }
+
+  void fetchStockHistoryDetail(String ticker) async {
+    try {
+      stockHistoryDetails.value = await stockRepository.getStockHistoryDetail(
+        ticker: ticker,
+      );
+
+      if (stockHistoryDetails.isNotEmpty) {
+        // Set the current tracked date to the most recent date
+        currentTrackedDate.value = stockHistoryDetails.first.date;
+      }
+    } catch (e) {
+      print("Error fetching stock history detail: $e");
+    }
   }
 
   bool sameDate(DateTime a, DateTime b) =>

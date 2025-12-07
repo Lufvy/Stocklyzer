@@ -26,16 +26,11 @@ class RedisManager {
 
   /// Generic Get
   Future<T?> getValue<T>(String key) async {
-    final res = await _client.get(key);
+    final T? res = await _client.get(key);
 
     if (res == null) return null;
 
-    try {
-      return res as T;
-    } catch (e) {
-      print("⚠️ Type mismatch for key '$key': $e");
-      return null;
-    }
+    return res;
   }
 
   /// Optional delete helper

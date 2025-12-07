@@ -171,6 +171,7 @@ class AuthService extends GetxController {
   void checkSession() async {
     final session = _client.auth.currentSession;
     if (session != null) {
+      print("session recovered");
       isLoggedIn.value = true;
       final user = session.user;
 

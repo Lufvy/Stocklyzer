@@ -2,7 +2,8 @@ enum RedisCacheKey {
   allStocks("MsStock:AllStocks"),
   singleStock("MsStock"),
   stockGraph("MsStock:StockGraph"),
-  userWatchlist("UserWatchList");
+  userWatchlist("UserWatchList"),
+  stockHistoryDetail("MsStock:StockHistoryDetail");
 
   final String key;
   const RedisCacheKey(this.key);
@@ -26,6 +27,10 @@ enum RedisCacheKey {
 
   static String cacheStockGraph(String ticker) {
     return '${RedisCacheKey.stockGraph.key}:$ticker:${_ddmmyyyy(DateTime.now())}';
+  }
+
+  static String cacheStockHistoryDetail(String ticker) {
+    return '${RedisCacheKey.stockHistoryDetail.key}:$ticker:${_ddmmyyyy(DateTime.now())}';
   }
 
   static String _ddmmyyyy(DateTime d) =>

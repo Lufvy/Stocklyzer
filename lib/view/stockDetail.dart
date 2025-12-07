@@ -2,16 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
+import 'package:stocklyzer/IOHelper/IOHelper.dart';
 import 'package:stocklyzer/component/StockChart.dart';
 import 'package:stocklyzer/component/loading.dart';
 import 'package:stocklyzer/config/appTheme.dart';
 import 'package:stocklyzer/config/extension.dart';
-import 'package:stocklyzer/controller/homeController.dart';
 import 'package:stocklyzer/controller/stockDetailController.dart';
 import 'package:stocklyzer/controller/themeController.dart';
-import 'package:stocklyzer/model/StockData.dart';
-import 'package:stocklyzer/model/StockPrediction.dart';
-import 'package:syncfusion_flutter_charts/charts.dart';
+import 'package:stocklyzer/dto/stockHistoryDetailDTO.dart';
 
 class StockDetail extends StatefulWidget {
   final String selectedTicker;
@@ -129,7 +127,10 @@ class _StockDetailState extends State<StockDetail> {
                               ),
 
                         companyInformation(context),
-                        predictHistory(context),
+                        predictHistory(
+                          context,
+                          stockDetailController.stockHistoryDetails,
+                        ),
                       ],
                     ),
                   ),
@@ -275,7 +276,10 @@ class _StockDetailState extends State<StockDetail> {
     );
   }
 
-  Widget predictHistory(BuildContext context) {
+  Widget predictHistory(
+    BuildContext context,
+    List<StockHistoryDetailDTO> stockHistoryDetail,
+  ) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       spacing: 15,
@@ -421,96 +425,69 @@ class _StockDetailState extends State<StockDetail> {
                   ],
                 ),
 
-                // Obx(() {
-                //   var stockDataList = homeController.stockData
-                //       .where(
-                //         (s) =>
-                //             s.ticker ==
-                //             homeController.selected_msStock.value?.ticker,
-                //       )
-                //       .toList();
+                Obx(() {
+                  stockHistoryDetail;
 
-                //   return ListView.builder(
-                //     physics: const NeverScrollableScrollPhysics(),
-                //     shrinkWrap: true,
-                //     itemCount: stockDataList.length,
-                //     itemBuilder: (context, index) {
-                //       final stockData = stockDataList[index];
+                  return ListView.builder(
+                    physics: const NeverScrollableScrollPhysics(),
+                    shrinkWrap: true,
+                    itemCount: stockHistoryDetail.length,
+                    itemBuilder: (context, index) {
+                      final stockData = stockHistoryDetail[index];
+                      final date = stockData.date;
+                      final realClose = stockData.close;
+                      final prediction = stockData.predictedClose;
+                      final accuracy = stockData.accuracy;
 
-                //       final prediction = homeController.stockprediction
-                //           .firstWhereOrNull(
-                //             (p) =>
-                //                 p.ticker ==
-                //                     homeController
-                //                         .selected_msStock
-                //                         .value
-                //                         ?.ticker &&
-                //                 p.date == stockData.date,
-                //           );
+                      return Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 6),
+                        child: Row(
+                          children: [
+                            Expanded(
+                              flex: 3,
+                              child: Text(
+                                DateFormat('dd/MM/yyyy').format(date),
+                                style: GoogleFonts.poppins(fontSize: 11),
+                                textAlign: TextAlign.center,
+                              ),
+                            ),
+                            Expanded(
+                              flex: 3,
+                              child: Text(
+                                IOHelper.formatPrice(realClose),
+                                style: GoogleFonts.poppins(fontSize: 11),
+                                textAlign: TextAlign.center,
+                              ),
+                            ),
+                            Expanded(
+                              flex: 4,
+                              child: Text(
+                                IOHelper.formatPrice(prediction),
+                                style: GoogleFonts.poppins(
+                                  fontSize: 11,
+                                  color: Color(0XFFFFB700),
+                                ),
 
-                //       double? accuracy;
-                //       if (prediction != null && stockData.close > 0) {
-                //         final diff =
-                //             (stockData.close - prediction.closePrediction)
-                //                 .abs();
-                //         accuracy = (1 - diff / stockData.close) * 100;
-                //       }
-
-                //       return Padding(
-                //         padding: const EdgeInsets.symmetric(vertical: 6),
-                //         child: Row(
-                //           children: [
-                //             Expanded(
-                //               flex: 3,
-                //               child: Text(
-                //                 DateFormat('dd/MM/yyyy').format(stockData.date),
-                //                 style: GoogleFonts.poppins(fontSize: 11),
-                //                 textAlign: TextAlign.center,
-                //               ),
-                //             ),
-                //             Expanded(
-                //               flex: 3,
-                //               child: Text(
-                //                 Homecontroller.formatPrice(stockData.close),
-                //                 style: GoogleFonts.poppins(fontSize: 11),
-                //                 textAlign: TextAlign.center,
-                //               ),
-                //             ),
-                //             Expanded(
-                //               flex: 4,
-                //               child: Text(
-                //                 prediction != null
-                //                     ? Homecontroller.formatPrice(
-                //                         prediction.closePrediction,
-                //                       )
-                //                     : '-',
-                //                 style: GoogleFonts.poppins(
-                //                   fontSize: 11,
-                //                   color: Color(0XFFFFB700),
-                //                 ),
-
-                //                 textAlign: TextAlign.center,
-                //               ),
-                //             ),
-                //             Expanded(
-                //               flex: 2,
-                //               child: Text(
-                //                 accuracy != null
-                //                     ? '${accuracy.toStringAsFixed(1)}%'
-                //                     : '-',
-                //                 style: GoogleFonts.poppins(
-                //                   fontSize: 11,
-                //                   color: Color(0XFF00C9E7),
-                //                 ),
-                //                 textAlign: TextAlign.center,
-                //               ),
-                //             ),
-                //           ],
-                //         ),
-                //       );
-                //     },
-                //   );
-                // }),
+                                textAlign: TextAlign.center,
+                              ),
+                            ),
+                            Expanded(
+                              flex: 2,
+                              child: Text(
+                                "${IOHelper.getPercentageDigit(accuracy)}%",
+                                style: GoogleFonts.poppins(
+                                  fontSize: 11,
+                                  color: Color(0XFF00C9E7),
+                                ),
+                                textAlign: TextAlign.center,
+                              ),
+                            ),
+                          ],
+                        ),
+                      );
+                    },
+                  );
+                }),
               ],
             ),
           ),
