@@ -33,9 +33,9 @@ class _NavbarState extends State<Navbar> {
   void initState() {
     super.initState();
 
-    // WidgetsBinding.instance.addPostFrameCallback((_) {
-    //   warningDialog();
-    // });
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      warningDialog();
+    });
   }
 
   @override
