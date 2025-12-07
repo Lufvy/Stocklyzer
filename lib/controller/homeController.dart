@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:stocklyzer/controller/navBarController.dart';
 import 'package:stocklyzer/dto/stockGraphDTO.dart';
 import 'package:stocklyzer/dto/watchListDTO.dart';
@@ -87,9 +88,19 @@ class Homecontroller extends GetxController {
 
     ever(navBar.selectedIndex, (index) {
       if (index == 0) {
-        // TODO: re-fetch watchlist data if its invalidated
-        print("test");
+        handleNavbarWatchlistRefresh();
       }
     });
+  }
+
+  void handleNavbarWatchlistRefresh() async {
+    final prefs = await SharedPreferences.getInstance();
+    final isRefreshNeeded =
+        prefs.getBool('isNavbarWatchlistRefreshNeeded') ?? false;
+
+    if (isRefreshNeeded) {
+      populateWatchlist();
+      await prefs.setBool('isNavbarWatchlistRefreshNeeded', false);
+    }
   }
 }

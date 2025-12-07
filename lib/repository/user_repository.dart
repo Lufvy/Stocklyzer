@@ -1,6 +1,7 @@
 import 'package:stocklyzer/model/MsUser.dart';
 import 'package:stocklyzer/services/supabase/supabase_enum.dart';
 import 'package:stocklyzer/services/supabase/supabase_manager.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 class UserRepository {
   final _client = SupabaseManager().client;
@@ -62,6 +63,45 @@ class UserRepository {
 
       return response.isNotEmpty;
     } catch (e) {
+      return false;
+    }
+  }
+
+  Future<bool> removeWatchList(List<String> watchList) async {
+    final userSession = _client.auth.currentUser;
+    final email = userSession?.email;
+
+    if (email == null) {
+      print("❌ Error: User session or email is null.");
+      return false;
+    }
+
+    if (watchList.isEmpty) {
+      return true;
+    }
+
+    try {
+      final response = await _client
+          .from(userWatchlistTable.tableName)
+          .delete()
+          .eq(userWatchlistColumn.email, email)
+          .inFilter(userWatchlistColumn.ticker, watchList)
+          .select(); // Response will be List<Map<String, dynamic>> of deleted rows.
+
+      if (response.isNotEmpty) {
+        print(
+          "✅ Successfully deleted ${response.length} stocks from watchlist for $email.",
+        );
+        return true;
+      }
+
+      print("✅ Deletion query executed, but 0 items were found/deleted.");
+      return true;
+    } on PostgrestException catch (e) {
+      print("❌ Postgrest Error removing watch list: ${e.message}");
+      return false;
+    } catch (e) {
+      print("❌ General Error removing watch list: $e");
       return false;
     }
   }

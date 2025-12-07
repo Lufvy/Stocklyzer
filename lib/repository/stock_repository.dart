@@ -75,6 +75,7 @@ class StockRepository {
 
       if (cached != null) {
         final decoded = jsonDecode(cached) as List;
+        print('Cache Hit: Returning user watchlist for $email from Redis.');
         return decoded
             .map((e) => WatchListDTO.fromJson(e as Map<String, dynamic>))
             .toList();
@@ -106,7 +107,6 @@ class StockRepository {
         await redis.setValue(
           cacheKey,
           jsonEncode(list.map((e) => e.toJson()).toList()),
-          ttl: cacheDuration,
         );
       }
 
@@ -115,6 +115,12 @@ class StockRepository {
       // The original code printed to console, but the request asks to match getAllStocks flow, which throws an exception.
       throw Exception('Error fetching user watchlist: $e');
     }
+  }
+
+  void invalidateUserWatchlistCache(String email) {
+    final cacheKey = RedisCacheKey.cacheUserWatchlist(email);
+    redis.delete(cacheKey);
+    print('Invalidated user watchlist cache for $email');
   }
 
   Future<StockGraphDTO> getStockGraph(String ticker) async {

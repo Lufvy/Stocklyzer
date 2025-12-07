@@ -219,11 +219,7 @@ class Home extends StatelessWidget {
                     children: [
                       GestureDetector(
                         onTap: () {
-                          Get.to(
-                            () => StockDetail(
-                              selectedTicker: stockWatchlist.ticker,
-                            ),
-                          );
+                          navigateToDetail(stockWatchlist.ticker);
                         },
                         child: Container(
                           decoration: BoxDecoration(
@@ -328,5 +324,15 @@ class Home extends StatelessWidget {
         ),
       ],
     );
+  }
+
+  void navigateToDetail(String ticker) async {
+    final isNavigateBack = await Get.to(
+      () => StockDetail(selectedTicker: ticker),
+    );
+
+    if (isNavigateBack == true) {
+      homeController.handleNavbarWatchlistRefresh();
+    }
   }
 }

@@ -28,6 +28,7 @@ class _StockDetailState extends State<StockDetail> {
   @override
   void initState() {
     super.initState();
+    stockDetailController.initBookmarkStatus(widget.selectedTicker);
     stockDetailController.initDetailStock(widget.selectedTicker);
   }
 
@@ -60,7 +61,7 @@ class _StockDetailState extends State<StockDetail> {
                           children: [
                             IconButton(
                               onPressed: () {
-                                Get.back();
+                                Get.back(result: true);
                               },
                               icon: Icon(
                                 Icons.arrow_back,
@@ -87,8 +88,10 @@ class _StockDetailState extends State<StockDetail> {
                               ),
                             ),
                             InkWell(
-                              onTap: () {},
-                              child: Icon(Icons.bookmark_border_outlined),
+                              onTap: stockDetailController.onBookmarkToggled,
+                              child: stockDetailController.isBookmarked.value
+                                  ? Icon(Icons.bookmark_outlined)
+                                  : Icon(Icons.bookmark_border_outlined),
                             ),
                           ],
                         ),
