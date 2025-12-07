@@ -19,11 +19,20 @@ class Navbar extends StatefulWidget {
 class _NavbarState extends State<Navbar> {
   final Navbarcontroller navController = Get.put(Navbarcontroller());
 
-  final List<Widget> pages = [Home(), Search(), Profile()];
+  // final List<Widget> pages = [Home(), Search(), Profile()];
+
+  final List<Widget Function()> pageBuilders = [
+    () => Home(),
+    () => Search(),
+    () => Profile(),
+  ];
+
+  final Map<int, Widget> _pageCache = {};
 
   @override
   void initState() {
     super.initState();
+
     WidgetsBinding.instance.addPostFrameCallback((_) {
       warningDialog();
     });
@@ -37,18 +46,33 @@ class _NavbarState extends State<Navbar> {
   @override
   Widget build(BuildContext context) {
     return Obx(() {
+      final selectedIndex = navController.selectedIndex.value;
+
       return Scaffold(
         extendBody: true,
         body: IndexedStack(
-          index: navController.selectedIndex.value,
-          children: pages,
+          index: selectedIndex,
+          children: List.generate(pageBuilders.length, (index) {
+            // Check cache first
+            if (_pageCache[index] != null) {
+              return _pageCache[index]!;
+            }
+
+            if (index == selectedIndex) {
+              final page = pageBuilders[index]();
+              _pageCache[index] = page; // Cache the built widget
+              return page;
+            }
+
+            return Container();
+          }),
         ),
         bottomNavigationBar: ClipRRect(
           child: BackdropFilter(
             filter: ImageFilter.blur(sigmaX: 15, sigmaY: 15),
             child: BottomNavigationBar(
               type: BottomNavigationBarType.fixed,
-              currentIndex: navController.selectedIndex.value,
+              currentIndex: selectedIndex,
               onTap: navController.changeTab,
               items: [
                 BottomNavigationBarItem(
