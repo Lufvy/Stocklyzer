@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
+import 'package:stocklyzer/component/StockChart.dart';
 import 'package:stocklyzer/component/loading.dart';
 import 'package:stocklyzer/config/appTheme.dart';
 import 'package:stocklyzer/config/extension.dart';
@@ -96,7 +97,16 @@ class _StockDetailState extends State<StockDetail> {
 
                         stockDetailController.selectedStockGraphData.value !=
                                 null
-                            ? mainChart(context)
+                            ? StockChart(
+                                themeController: themeController,
+                                context: context,
+                                dataGraph: stockDetailController
+                                    .selectedStockGraphData
+                                    .value!,
+                                hoverPoint: stockDetailController
+                                    .selectedStockHoverPoint
+                                    .value!,
+                              )
                             : Container(
                                 width: double
                                     .infinity, // Set the desired width in logical pixels
@@ -128,270 +138,6 @@ class _StockDetailState extends State<StockDetail> {
             ),
 
             if (stockDetailController.isLoading.value) OverlayLoading(),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget mainChart(BuildContext context) {
-    final actualData = stockDetailController
-        .selectedStockGraphData
-        .value!
-        .stockData
-        .toList();
-
-    final predictedData = stockDetailController
-        .selectedStockGraphData
-        .value!
-        .stockPrediction
-        .toList();
-
-    return Container(
-      decoration: BoxDecoration(
-        color: Theme.of(context).colorScheme.secondaryContainer,
-        borderRadius: BorderRadius.circular(8),
-        border: themeController.isDarkMode.value
-            ? null
-            : Border.all(
-                width: 2,
-                color: Theme.of(context).colorScheme.onSecondaryContainer,
-              ),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.all(20),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          spacing: 13,
-          children: [
-            Text(
-              DateFormat('dd/MM/yyyy').format(
-                stockDetailController.selectedStockHoverPoint.value!.date,
-              ),
-              style: GoogleFonts.poppins(
-                fontSize: 15,
-                fontWeight: CustomFontWeight.medium,
-              ),
-            ),
-            Obx(() {
-              var actual = stockDetailController
-                  .selectedStockGraphData
-                  .value!
-                  .stockData
-                  .firstWhereOrNull(
-                    (s) =>
-                        s.ticker ==
-                        stockDetailController.selectedStock.value?.ticker,
-                  );
-
-              var prediction = stockDetailController
-                  .selectedStockGraphData
-                  .value!
-                  .stockPrediction
-                  .firstWhereOrNull(
-                    (p) =>
-                        p.ticker ==
-                        stockDetailController.selectedStock.value?.ticker,
-                  );
-
-              return Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                spacing: 30,
-                children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    spacing: 2,
-                    children: [
-                      Text(
-                        'Last Price',
-                        style: GoogleFonts.poppins(
-                          fontSize: 12,
-                          fontWeight: CustomFontWeight.light,
-                          color: themeController.isDarkMode.value
-                              ? Colors.white.withValues(alpha: 0.8)
-                              : Colors.black.withValues(alpha: 0.8),
-                        ),
-                      ),
-                      Text(
-                        actual != null
-                            ? Homecontroller.formatPrice(actual.close)
-                            : '-',
-                        style: GoogleFonts.poppins(
-                          fontSize: 20,
-                          fontWeight: CustomFontWeight.bold,
-                        ),
-                      ),
-                    ],
-                  ),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    spacing: 2,
-                    children: [
-                      Text(
-                        'Predicted Price',
-                        style: GoogleFonts.poppins(
-                          fontSize: 12,
-                          fontWeight: CustomFontWeight.light,
-                          color: themeController.isDarkMode.value
-                              ? Colors.white.withValues(alpha: 0.8)
-                              : Colors.black.withValues(alpha: 0.8),
-                        ),
-                      ),
-                      Text(
-                        prediction != null
-                            ? Homecontroller.formatPrice(
-                                prediction.closePrediction,
-                              )
-                            : '-',
-                        style: GoogleFonts.poppins(
-                          fontSize: 20,
-                          fontWeight: CustomFontWeight.bold,
-                          color: Color(0XFFFFB700),
-                        ),
-                      ),
-                    ],
-                  ),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    spacing: 2,
-                    children: [
-                      Text(
-                        'Accuracy',
-                        style: GoogleFonts.poppins(
-                          fontSize: 12,
-                          fontWeight: CustomFontWeight.light,
-                          color: themeController.isDarkMode.value
-                              ? Colors.white.withValues(alpha: 0.8)
-                              : Colors.black.withValues(alpha: 0.8),
-                        ),
-                      ),
-                      Text(
-                        "${StockDetailController.getPercentageDigit(stockDetailController.selectedStockHoverPoint.value?.accuracy ?? 0.0)}%",
-                        style: GoogleFonts.poppins(
-                          fontSize: 20,
-                          fontWeight: CustomFontWeight.bold,
-                          color: Color(0XFF65DD63),
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              );
-            }),
-            // ===== Chart =====
-            SizedBox(
-              height: 200,
-              child: SfCartesianChart(
-                backgroundColor: Colors.transparent,
-                plotAreaBorderColor: Colors.black,
-                legend: const Legend(isVisible: false),
-                trackballBehavior: TrackballBehavior(
-                  enable: true,
-                  activationMode: ActivationMode.singleTap,
-                  lineType: TrackballLineType.vertical,
-                  tooltipDisplayMode: TrackballDisplayMode.groupAllPoints,
-                  tooltipSettings: const InteractiveTooltip(enable: false),
-                  builder: (context, dynamic details) {
-                    final points = details?.groupingModeInfo?.points ?? [];
-                    if (points.isEmpty) return const SizedBox.shrink();
-
-                    final date = points.first.x as DateTime;
-                    final dateText = DateFormat('MMM dd, yyyy').format(date);
-
-                    final actual = actualData.firstWhereOrNull(
-                      (s) => stockDetailController.sameDate(s.date, date),
-                    );
-                    final predicted = predictedData.firstWhereOrNull(
-                      (s) => stockDetailController.sameDate(s.date, date),
-                    );
-
-                    return Container(
-                      padding: const EdgeInsets.all(8),
-                      decoration: BoxDecoration(
-                        color: Theme.of(
-                          context,
-                        ).colorScheme.onSecondaryContainer,
-                        borderRadius: BorderRadius.circular(8),
-                        boxShadow: const [
-                          BoxShadow(
-                            color: Colors.black45,
-                            blurRadius: 6,
-                            offset: Offset(2, 2),
-                          ),
-                        ],
-                      ),
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            'Date: $dateText',
-                            style: const TextStyle(
-                              color: Colors.white,
-                              fontSize: 12,
-                            ),
-                          ),
-                          if (actual != null)
-                            Text(
-                              'Actual: Rp ${Homecontroller.formatPrice(actual.close)}',
-                              style: const TextStyle(
-                                color: Colors.greenAccent,
-                                fontSize: 12,
-                              ),
-                            ),
-                          if (predicted != null)
-                            Text(
-                              'Predicted: Rp ${Homecontroller.formatPrice(predicted.closePrediction)}',
-                              style: const TextStyle(
-                                color: Colors.orangeAccent,
-                                fontSize: 12,
-                              ),
-                            ),
-                        ],
-                      ),
-                    );
-                  },
-                ),
-
-                primaryXAxis: DateTimeAxis(
-                  dateFormat: DateFormat.MMMd(),
-                  intervalType: DateTimeIntervalType.days,
-                  interval: 1,
-                  majorGridLines: const MajorGridLines(width: 0),
-                ),
-
-                primaryYAxis: NumericAxis(
-                  axisLine: const AxisLine(width: 0),
-                  majorTickLines: const MajorTickLines(size: 0),
-                  majorGridLines: const MajorGridLines(color: Colors.black),
-                ),
-
-                series: <CartesianSeries>[
-                  // ===== Actual =====
-                  LineSeries<StockData, DateTime>(
-                    name: 'Actual',
-                    dataSource: actualData,
-                    xValueMapper: (StockData stock, _) => stock.date,
-                    yValueMapper: (StockData stock, _) => stock.close,
-                    color: Colors.greenAccent,
-                    markerSettings: const MarkerSettings(isVisible: true),
-                    animationDuration: 1000,
-                  ),
-
-                  // ===== Predicted =====
-                  LineSeries<StockPrediction, DateTime>(
-                    name: 'Predicted',
-                    dataSource: predictedData,
-                    xValueMapper: (StockPrediction stock, _) => stock.date,
-                    yValueMapper: (StockPrediction stock, _) =>
-                        stock.closePrediction,
-                    color: Colors.orangeAccent,
-                    dashArray: const [5, 3],
-                    markerSettings: const MarkerSettings(isVisible: true),
-                  ),
-                ],
-              ),
-            ),
           ],
         ),
       ),
