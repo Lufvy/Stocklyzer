@@ -42,7 +42,7 @@ class StockChart extends StatelessWidget {
     final double yAxisMax;
 
     final List<double> allPrices = [
-      ...actualData.map((s) => s.close) ?? [],
+      ...actualData.map((s) => s.close),
       ...predictedData.map((s) => s.closePrediction),
     ];
 
